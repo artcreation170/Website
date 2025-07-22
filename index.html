@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Art and Creation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
+    })();
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Header -->
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="logo.jpg" alt="Art and Creation Logo" class="h-12 w-12 mr-3 rounded-full object-cover bg-white">
+        <h1 class="text-2xl font-bold text-pink-600">Art and Creation</h1>
+      </div>
+      <nav>
+        <a href="#home" class="text-gray-700 px-4">Home</a>
+        <a href="#products" class="text-gray-700 px-4">Shop</a>
+        <a href="#about" class="text-gray-700 px-4">About</a>
+        <a href="#contact" class="text-gray-700 px-4">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="text-center py-16 bg-pink-100">
+    <h2 class="text-4xl font-bold text-gray-800 mb-4">Unique Handmade Crafts</h2>
+    <p class="text-lg text-gray-600 mb-6">Made with love and creativity, delivered to your doorstep.</p>
+    <a href="#products" class="bg-pink-600 text-white px-6 py-3 rounded shadow hover:bg-pink-700">Shop Now</a>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center text-gray-800 mb-10">Testimonials</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <!-- Product Card 1 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden">
+          <img src="product.jpg" alt="Handmade Vase" class="h-48 w-48 mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Handmade Vase</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹499</p>
+            <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9?usp=pp_url&entry.3344556677=Handmade%20Vase" target="_blank" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Order Now</a>
+          </div>
+        </div>
+
+        <!-- Product Card 2 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden">
+          <img src="product2.jpg" alt="Woven Basket" class="h-48 w-48 mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Woven Basket</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹399</p>
+            <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9?usp=pp_url&entry.3344556677=Woven%20Basket" target="_blank" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Order Now</a>
+          </div>
+        </div>
+
+        <!-- Product Card 3 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden">
+          <img src="product3.jpg" alt="Decorative Frame" class="h-48 w-48 mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Decorative Frame</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹599</p>
+            <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9?usp=pp_url&entry.3344556677=Decorative%20Frame" target="_blank" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Order Now</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-16 bg-gray-100">
+    <div class="container mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold text-gray-800 mb-6">About Us</h3>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Welcome to Art and Creation! We are a passionate team of artisans dedicated to bringing the beauty of handmade crafts to the world. Each piece in our collection is thoughtfully designed and meticulously crafted, blending traditional techniques with modern creativity. Our mission is to share the warmth, uniqueness, and soul of handmade art with customers across the globe. Whether you’re looking for a special gift or a unique addition to your home, our crafts are made to inspire and delight. Thank you for supporting handmade and helping us keep this beautiful tradition alive worldwide.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-16 bg-white">
+    <div class="container mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold text-gray-800 mb-6">Contact Us</h3>
+      <p class="text-gray-600 mb-4">Have a question or custom request? Click the button below to fill out our form!</p>
+      <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9" target="_blank" class="bg-pink-600 text-white px-6 py-3 rounded shadow hover:bg-pink-700 transition inline-block">Open Contact Form</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-6">
+    <p>&copy; 2025 Art and Creation. All rights reserved.</p>
+  </footer>
+
+  <!-- Razorpay Payment Script -->
+  <script>
+  function payNow(product, amount) {
+      var options = {
+          "key": "rzp_test_YourApiKeyHere", // Replace with your Razorpay API Key
+          "amount": amount, // Amount is in paise: 49900 = ₹499.00
+          "currency": "INR",
+          "name": "Art and Creation",
+          "description": product,
+          "image": "logo.jpg",
+          "handler": function (response){
+              alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+          },
+          "prefill": {
+              "name": "",
+              "email": ""
+          },
+          "theme": {
+              "color": "#ec4899"
+          }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+  }
+  </script>
+
+  <!-- In-Page Chatbot Widget with Google Form Submission -->
+<style>
+#inpage-chatbot-toggle {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  background: #ec4899;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#inpage-chatbot-widget {
+  position: fixed;
+  bottom: 160px;
+  right: 24px;
+  width: 340px;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: inherit;
+}
+#inpage-chatbot-header {
+  background: #ec4899;
+  color: #fff;
+  padding: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+#inpage-chatbot-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: 300px;
+  font-size: 0.95rem;
+}
+#inpage-chatbot-input-area {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+#inpage-chatbot-input {
+  flex: 1;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+  outline: none;
+}
+#inpage-chatbot-send {
+  background: #ec4899;
+  color: #fff;
+  border: none;
+  padding: 0 1.25rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+#inpage-chatbot-send:hover {
+  background: #be185d;
+}
+</style>
+
+<button id="inpage-chatbot-toggle" title="Chat with us">💬</button>
+<div id="inpage-chatbot-widget">
+  <div id="inpage-chatbot-header">Chat with Us</div>
+  <div id="inpage-chatbot-messages"></div>
+  <div id="inpage-chatbot-input-area">
+    <input id="inpage-chatbot-input" type="text" placeholder="Type your message..." autocomplete="off" />
+    <button id="inpage-chatbot-send">Send</button>
+  </div>
+</div>
+<script>
+// Replace with your Google Form POST URL and field names
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfTAJ12duyHuYMGAuYBLfqwhpJGkCgdoKgY7m_kiOH-4Jh5Og/formResponse";
+const FIELD_NAME = "entry.1234567890";    // Name field
+const FIELD_EMAIL = "entry.0987654321";   // Email field
+const FIELD_PHONE = "entry.2233445566";   // Phone number field
+const FIELD_PRODUCT = "entry.3344556677"; // Product specification field
+const FIELD_QUERY = "entry.1122334455";   // Query field
+const FIELD_IMAGE = "entry.4455667788";   // Image file field (for file upload)
+
+const chatbotToggle = document.getElementById('inpage-chatbot-toggle');
+const chatbotWidget = document.getElementById('inpage-chatbot-widget');
+const chatbotMessages = document.getElementById('inpage-chatbot-messages');
+const chatbotInput = document.getElementById('inpage-chatbot-input');
+const chatbotSend = document.getElementById('inpage-chatbot-send');
+
+let chatState = 0;
+let userData = { name: "", email: "", phone: "", product: "", query: "", image: null };
+
+chatbotToggle.onclick = () => {
+  chatbotWidget.style.display = chatbotWidget.style.display === 'none' || chatbotWidget.style.display === '' ? 'flex' : 'none';
+  if (chatbotWidget.style.display === 'flex' && chatbotMessages.childElementCount === 0) {
+    appendMessage('Bot', "Hi! 👋 What's your name?");
+  }
+};
+
+function appendMessage(sender, text) {
+  const msg = document.createElement('div');
+  msg.style.margin = '0.5em 0';
+  msg.innerHTML = `<strong style="color:${sender==='You'?'#ec4899':'#333'}">${sender}:</strong> <span>${text}</span>`;
+  chatbotMessages.appendChild(msg);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function validateEmail(email) {
+  // Simple email validation
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validatePhone(phone) {
+  // Simple phone validation (10-15 digits)
+  return /^\d{10,15}$/.test(phone.replace(/\D/g, ""));
+}
+
+function botReply(userMsg) {
+  if (chatState === 0) {
+    userData.name = userMsg;
+    appendMessage('Bot', "Nice to meet you, " + userData.name + "! What's your email?");
+    chatState = 1;
+  } else if (chatState === 1) {
+    if (!validateEmail(userMsg)) {
+      appendMessage('Bot', "Please enter a valid email address.");
+      return;
+    }
+    userData.email = userMsg;
+    appendMessage('Bot', "Thanks! Please enter your phone number.");
+    chatState = 2;
+  } else if (chatState === 2) {
+    if (!validatePhone(userMsg)) {
+      appendMessage('Bot', "Please enter a valid phone number (10-15 digits).");
+      return;
+    }
+    userData.phone = userMsg;
+    appendMessage('Bot', "What product are you interested in? Please specify.");
+    chatState = 3;
+  } else if (chatState === 3) {
+    userData.product = userMsg;
+    appendMessage('Bot', "Please describe your query or order details.");
+    chatState = 4;
+  } else if (chatState === 4) {
+    userData.query = userMsg;
+    appendMessage('Bot', "Thank you! Sending your query...");
+    sendToGoogleForm(userData);
+    chatState = 5;
+  } else if (chatState === 5) {
+    // Only process if user typed 'no'
+    if (userMsg.trim().toLowerCase() === 'no') {
+      userData.image = null;
+      appendMessage('Bot', "Thank you! Sending your query...");
+      sendToGoogleForm(userData);
+      chatState = 6;
+    } else {
+      appendMessage('Bot', "If you want to upload an image, please use the file input above or type 'no' to skip.");
+    }
+  } else {
+    appendMessage('Bot', "We've received your query. We'll get back to you soon!");
+  }
+}
+
+function sendMessage() {
+  const text = chatbotInput.value.trim();
+  if (!text) return;
+  appendMessage('You', text);
+  chatbotInput.value = '';
+  botReply(text);
+}
+chatbotSend.onclick = sendMessage;
+chatbotInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') sendMessage();
+});
+
+// Handle file upload for image (JPG only)
+chatbotMessages.addEventListener('change', function(e) {
+  if (e.target && e.target.id === 'chatbot-image-upload') {
+    const file = e.target.files[0];
+    if (file && /\.(jpe?g)$/i.test(file.name)) {
+      userData.image = file;
+      appendMessage('Bot', "Image received! Sending your query...");
+      sendToGoogleForm(userData);
+      chatState = 6;
+    } else {
+      appendMessage('Bot', "Please upload a JPG image only.");
+    }
+  }
+});
+
+function sendToGoogleForm(data) {
+  const jsonData = {
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    product: data.product,
+    query: data.query
+  };
+  console.log("Chatbot user data:", JSON.stringify(jsonData, null, 2));
+
+  const formData = new FormData();
+  formData.append(FIELD_NAME, data.name);
+  formData.append(FIELD_EMAIL, data.email);
+  formData.append(FIELD_PHONE, data.phone);
+  formData.append(FIELD_PRODUCT, data.product);
+  formData.append(FIELD_QUERY, data.query);
+
+  fetch(GOOGLE_FORM_ACTION, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  }).then(() => {
+    appendMessage('Bot', "Your query has been submitted! We'll contact you soon.");
+  }).catch(() => {
+    appendMessage('Bot', "Sorry, there was an error submitting your query.");
+  });
+}
+</script>
+</body>
+</html>
