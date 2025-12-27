@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Art and Creation</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS (for carousel) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Razorpay Checkout Script -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -42,36 +44,128 @@
   <!-- Products Section -->
   <section id="products" class="py-16 bg-white">
     <div class="container mx-auto px-6">
-      <h3 class="text-3xl font-bold text-center text-gray-800 mb-10">Testimonials</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <h3 class="text-3xl font-bold text-center text-gray-800 mb-10">Products</h3>
+
+      <!-- Products grid (carousel removed) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
 
         <!-- Product Card 1 -->
-        <div class="bg-white shadow-md rounded-xl overflow-hidden">
-          <img src="product.jpg" alt="Handmade Vase" class="h-48 w-48 mx-auto mt-6 rounded-lg object-cover" />
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="product.jpg" alt="Handmade Vase" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
           <div class="p-6">
             <h4 class="text-xl font-bold text-gray-700">Handmade Vase</h4>
             <p class="text-pink-600 font-semibold mt-2">₹499</p>
-            <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9?usp=pp_url&entry.3344556677=Handmade%20Vase" target="_blank" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Order Now</a>
+            <a href="product.html?id=1" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
           </div>
         </div>
 
         <!-- Product Card 2 -->
-        <div class="bg-white shadow-md rounded-xl overflow-hidden">
-          <img src="product2.jpg" alt="Woven Basket" class="h-48 w-48 mx-auto mt-6 rounded-lg object-cover" />
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="product2.jpg" alt="Woven Basket" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
           <div class="p-6">
             <h4 class="text-xl font-bold text-gray-700">Woven Basket</h4>
             <p class="text-pink-600 font-semibold mt-2">₹399</p>
-            <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9?usp=pp_url&entry.3344556677=Woven%20Basket" target="_blank" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Order Now</a>
+            <a href="product.html?id=2" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
           </div>
         </div>
 
         <!-- Product Card 3 -->
-        <div class="bg-white shadow-md rounded-xl overflow-hidden">
-          <img src="product3.jpg" alt="Decorative Frame" class="h-48 w-48 mx-auto mt-6 rounded-lg object-cover" />
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="product3.jpg" alt="Decorative Frame" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
           <div class="p-6">
             <h4 class="text-xl font-bold text-gray-700">Decorative Frame</h4>
             <p class="text-pink-600 font-semibold mt-2">₹599</p>
-            <a href="https://forms.gle/Z6xqWiddAmz4Vhdz9?usp=pp_url&entry.3344556677=Decorative%20Frame" target="_blank" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Order Now</a>
+            <a href="product.html?id=3" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 4 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?handmade,craft,4" alt="Wall Hanging" class="h-48 w-full mx-auto.mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Handmade Wall Hanging</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹699</p>
+            <a href="product.html?id=4" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 5 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?basket,handicraft" alt="Decorative Basket" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Decorative Basket</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹450</p>
+            <a href="product.html?id=5" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 6 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?frame,decor" alt="Photo Frame" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Photo Frame</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹349</p>
+            <a href="product.html?id=6" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 7 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?pottery,ceramic" alt="Ceramic Pot" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Ceramic Pot</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹549</p>
+            <a href="product.html?id=7" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 8 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?candle,handmade" alt="Scented Candle" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Scented Candle</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹299</p>
+            <a href="product.html?id=8" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 9 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?textiles,handmade" alt="Handloom Scarf" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Handloom Scarf</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹799</p>
+            <a href="product.html?id=9" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 10 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?jewelry,handmade" alt="Beaded Necklace" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Beaded Necklace</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹649</p>
+            <a href="product.html?id=10" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 11 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?notebook,stationery" alt="Handmade Notebook" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Handmade Notebook</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹249</p>
+            <a href="product.html?id=11" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
+          </div>
+        </div>
+
+        <!-- Product Card 12 -->
+        <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
+          <img src="https://source.unsplash.com/600x400/?tray,handmade" alt="Serving Tray" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-700">Serving Tray</h4>
+            <p class="text-pink-600 font-semibold mt-2">₹899</p>
+            <a href="product.html?id=12" class="inline-block mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">View Product</a>
           </div>
         </div>
 
@@ -356,5 +450,8 @@ function sendToGoogleForm(data) {
   });
 }
 </script>
+
+  <!-- Bootstrap JS bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

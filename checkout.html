@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - Art and Creation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans">
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="logo.jpg" alt="Art and Creation Logo" class="h-12 w-12 mr-3 rounded-full object-cover bg-white">
+        <h1 class="text-2xl font-bold text-pink-600">Art and Creation</h1>
+      </div>
+      <nav>
+        <a href="index.html" class="text-gray-700 px-4">Back to Shop</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Checkout</h2>
+
+      <form id="checkoutForm">
+        <div class="mb-3">
+          <label class="form-label font-semibold">Product</label>
+          <input id="prodName" type="text" class="w-full border rounded px-3 py-2" readonly />
+        </div>
+        <div class="mb-3">
+          <label class="form-label font-semibold">Price (INR)</label>
+          <input id="prodPrice" type="text" class="w-full border rounded px-3 py-2" readonly />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label font-semibold">Full Name</label>
+          <input id="buyerName" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label font-semibold">Phone number</label>
+          <div class="flex gap-2">
+            <input id="buyerPhone" type="tel" class="flex-1 border rounded px-3 py-2" placeholder="Enter phone (10-15 digits)" required />
+            <button id="sendOtpBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Send OTP</button>
+          </div>
+          <div id="otpNote" class="text-sm text-gray-500 mt-2">OTP will be sent to the phone number (demo mode).</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label font-semibold">Enter OTP</label>
+          <div class="flex gap-2">
+            <input id="otpInput" type="text" class="flex-1 border rounded px-3 py-2" placeholder="6-digit OTP" />
+            <button id="verifyOtpBtn" type="button" class="bg-gray-200 px-4 py-2 rounded">Verify</button>
+          </div>
+          <div id="otpStatus" class="text-sm mt-2"></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label font-semibold">Address</label>
+          <textarea id="buyerAddress" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <button id="submitBtn" type="submit" class="bg-pink-600 text-white px-4 py-2 rounded" disabled>Place Order & Send Email</button>
+          <a href="index.html" class="text-sm text-gray-600">Cancel</a>
+        </div>
+      </form>
+
+      <p class="mt-4 text-sm text-gray-500">Note: OTP sending is in demo mode (no SMS provider configured). See instructions below to enable real SMS delivery (Twilio/Firebase).</p>
+
+      <hr class="my-6" />
+
+      <h6 class="font-semibold">Integration notes</h6>
+      <ul class="text-sm text-gray-600 list-disc pl-5">
+        <li>To send SMS OTPs in production, integrate a service such as Twilio or Firebase Phone Auth (requires server or Firebase config).</li>
+        <li>To send email automatically from the browser use <code class="bg-gray-100 px-1 rounded">EmailJS</code>. You must replace the placeholders below with your EmailJS user/service/template IDs.</li>
+      </ul>
+
+      <!-- EmailJS setup UI -->
+      <div class="mt-4 p-4 border rounded bg-gray-50">
+        <h6 class="font-semibold mb-2">EmailJS Setup (for testing)</h6>
+        <p class="text-sm text-gray-600 mb-2">Enter your EmailJS IDs here and click <strong>Save</strong>. Values are stored in your browser <code>localStorage</code>.
+        Use these IDs from your EmailJS account: <em>User ID</em>, <em>Service ID</em>, and <em>Template ID</em>.</p>
+        <div class="grid grid-cols-1 gap-2 mb-2">
+          <input id="ej_user" placeholder="EmailJS User ID (user_xxx)" class="w-full border px-2 py-2 rounded" />
+          <input id="ej_service" placeholder="EmailJS Service ID (service_xxx)" class="w-full border px-2 py-2 rounded" />
+          <input id="ej_template" placeholder="EmailJS Template ID (template_xxx)" class="w-full border px-2 py-2 rounded" />
+        </div>
+        <div class="flex gap-2">
+          <button id="saveEmailJs" class="bg-pink-600 text-white px-3 py-2 rounded">Save</button>
+          <button id="clearEmailJs" class="bg-gray-200 px-3 py-2 rounded">Clear</button>
+          <div id="emailJsStatus" class="text-sm text-gray-600 self-center ml-3"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-800 text-white text-center py-6">
+    <p>&copy; 2025 Art and Creation. All rights reserved.</p>
+  </footer>
+
+  <!-- EmailJS client library (used to send order email) -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    // EmailJS will be initialized from stored config when available.
+    function initEmailJsFromStorage() {
+      try {
+        const uid = localStorage.getItem('emailjs_user');
+        if (uid && window.emailjs && typeof emailjs.init === 'function') {
+          emailjs.init(uid);
+          const status = document.getElementById('emailJsStatus');
+          if (status) status.textContent = 'EmailJS initialized from saved config.';
+        }
+      } catch (e) {
+        console.warn('Failed to init EmailJS from storage', e);
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Copy of products data (same ids as product list)
+    const products = [
+      { id:1, name:'Handmade Vase', price:'499' },
+      { id:2, name:'Woven Basket', price:'399' },
+      { id:3, name:'Decorative Frame', price:'599' },
+      { id:4, name:'Handmade Wall Hanging', price:'699' },
+      { id:5, name:'Decorative Basket', price:'450' },
+      { id:6, name:'Photo Frame', price:'349' },
+      { id:7, name:'Ceramic Pot', price:'549' },
+      { id:8, name:'Scented Candle', price:'299' },
+      { id:9, name:'Handloom Scarf', price:'799' },
+      { id:10, name:'Beaded Necklace', price:'649' },
+      { id:11, name:'Handmade Notebook', price:'249' },
+      { id:12, name:'Serving Tray', price:'899' }
+    ];
+
+    // Simple demo OTP implementation (for production replace with SMS provider)
+    let currentOtp = null;
+    let otpVerified = false;
+
+    function getQueryParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function populateCheckout() {
+      const id = parseInt(getQueryParam('id') || '1', 10);
+      const p = products.find(x=>x.id===id) || products[0];
+      document.getElementById('prodName').value = p.name;
+      document.getElementById('prodPrice').value = p.price;
+    }
+
+    function sendOtpDemo() {
+      const phone = document.getElementById('buyerPhone').value.trim();
+      const note = document.getElementById('otpNote');
+      if (!/^\d{10,15}$/.test(phone.replace(/\D/g, ''))) {
+        note.textContent = 'Please enter a valid phone number (10-15 digits).';
+        note.className = 'text-sm text-red-600 mt-2';
+        return;
+      }
+      // Generate random 6-digit OTP
+      currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      otpVerified = false;
+      document.getElementById('otpStatus').textContent = '';
+      // Demo: show OTP to user (in real app send via SMS)
+      note.innerHTML = 'Demo OTP (not sent via SMS): <strong>' + currentOtp + '</strong> — replace with a real SMS provider for production.';
+      note.className = 'text-sm text-gray-700 mt-2';
+      document.getElementById('submitBtn').disabled = true;
+    }
+
+    function verifyOtp() {
+      const entered = (document.getElementById('otpInput').value || '').trim();
+      const status = document.getElementById('otpStatus');
+      if (!currentOtp) {
+        status.textContent = 'Please request an OTP first.';
+        status.className = 'text-sm text-red-600 mt-1';
+        return;
+      }
+      if (entered === currentOtp) {
+        otpVerified = true;
+        status.textContent = 'Phone verified ✓';
+        status.className = 'text-sm text-green-600 mt-1';
+        document.getElementById('submitBtn').disabled = false;
+      } else {
+        otpVerified = false;
+        status.textContent = 'Incorrect OTP. Try again.';
+        status.className = 'text-sm text-red-600 mt-1';
+        document.getElementById('submitBtn').disabled = true;
+      }
+    }
+
+    function sendOrderEmail(formData) {
+      // Read EmailJS config from localStorage (set via the EmailJS Setup UI on this page)
+      const SERVICE_ID = localStorage.getItem('emailjs_service');
+      const TEMPLATE_ID = localStorage.getItem('emailjs_template');
+
+      if (!SERVICE_ID || !TEMPLATE_ID) {
+        return Promise.reject(new Error('EmailJS not configured. Open the EmailJS Setup panel and enter Service ID and Template ID.'));
+      }
+
+      // Template params - match your EmailJS template fields
+      const templateParams = {
+        to_email: 'artcreation175@gmail.com',
+        product_name: formData.product,
+        product_price: formData.price,
+        buyer_name: formData.name,
+        buyer_phone: formData.phone,
+        buyer_address: formData.address
+      };
+
+      return emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateCheckout();
+
+      document.getElementById('sendOtpBtn').addEventListener('click', sendOtpDemo);
+      document.getElementById('verifyOtpBtn').addEventListener('click', verifyOtp);
+
+      // EmailJS setup UI handlers
+      function loadEmailJsConfigToUI() {
+        const u = localStorage.getItem('emailjs_user') || '';
+        const s = localStorage.getItem('emailjs_service') || '';
+        const t = localStorage.getItem('emailjs_template') || '';
+        const elUser = document.getElementById('ej_user');
+        const elService = document.getElementById('ej_service');
+        const elTemplate = document.getElementById('ej_template');
+        if (elUser) elUser.value = u;
+        if (elService) elService.value = s;
+        if (elTemplate) elTemplate.value = t;
+        initEmailJsFromStorage();
+      }
+
+      function saveEmailJsConfig() {
+        const u = (document.getElementById('ej_user').value || '').trim();
+        const s = (document.getElementById('ej_service').value || '').trim();
+        const t = (document.getElementById('ej_template').value || '').trim();
+        if (!u || !s || !t) {
+          alert('Please fill all three EmailJS fields (User, Service, Template) before saving.');
+          return;
+        }
+        localStorage.setItem('emailjs_user', u);
+        localStorage.setItem('emailjs_service', s);
+        localStorage.setItem('emailjs_template', t);
+        initEmailJsFromStorage();
+        const status = document.getElementById('emailJsStatus');
+        if (status) status.textContent = 'Saved and initialized.';
+      }
+
+      function clearEmailJsConfig() {
+        localStorage.removeItem('emailjs_user');
+        localStorage.removeItem('emailjs_service');
+        localStorage.removeItem('emailjs_template');
+        const status = document.getElementById('emailJsStatus');
+        if (status) status.textContent = 'Cleared.';
+      }
+
+      const saveBtn = document.getElementById('saveEmailJs');
+      if (saveBtn) saveBtn.addEventListener('click', saveEmailJsConfig);
+      const clearBtn = document.getElementById('clearEmailJs');
+      if (clearBtn) clearBtn.addEventListener('click', clearEmailJsConfig);
+      loadEmailJsConfigToUI();
+
+
+      document.getElementById('checkoutForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        if (!otpVerified) {
+          alert('Please verify your phone number with OTP before submitting.');
+          return;
+        }
+        const data = {
+          product: document.getElementById('prodName').value,
+          price: document.getElementById('prodPrice').value,
+          name: document.getElementById('buyerName').value.trim(),
+          phone: document.getElementById('buyerPhone').value.trim(),
+          address: document.getElementById('buyerAddress').value.trim()
+        };
+
+        // Basic validation
+        if (!data.name || !/^\d{10,15}$/.test(data.phone.replace(/\D/g, '')) || !data.address) {
+          alert('Please fill in all required fields correctly.');
+          return;
+        }
+
+        // Send email via EmailJS
+        sendOrderEmail(data).then(() => {
+          alert('Order submitted and email sent. Thank you!');
+          window.location.href = 'index.html';
+        }).catch((err) => {
+          console.error('Email send error:', err);
+          alert('Order submitted locally, but failed to send email. Configure EmailJS correctly to enable email sending.');
+          window.location.href = 'index.html';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
