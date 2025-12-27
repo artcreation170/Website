@@ -26,7 +26,7 @@
         <div class="col-lg-6">
           <div id="gallery">
             <!-- Main image and thumbnails will be injected here -->
-            <img id="mainImage" src="product.jpg" alt="Product" class="w-full rounded-lg object-cover mb-4">
+            <img id="mainImage" src="./images/product1/image1.svg" alt="Product" class="w-full rounded-lg object-cover mb-4" onerror="this.onerror=null;this.src='./images/placeholder.svg'">
 
             <div id="thumbs" class="grid grid-cols-4 gap-2"></div>
           </div>
@@ -63,20 +63,14 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Default data for 12 products (dummy links and images)
+    // Default data for 6 products (dummy links and images)
     const products = [
-      { id:1, name:'Handmade Vase', price:'499', description:'A beautiful handmade vase crafted with care.', main:'product.jpg', thumbs:['product.jpg','https://source.unsplash.com/600x400/?vase,craft','https://source.unsplash.com/600x400/?pottery','https://source.unsplash.com/600x400/?ceramic'], images:['https://source.unsplash.com/1200x800/?vase,craft','https://source.unsplash.com/1200x800/?vase,decor','https://source.unsplash.com/1200x800/?ceramics'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:2, name:'Woven Basket', price:'399', description:'Handwoven basket perfect for home storage.', main:'product2.jpg', thumbs:['product2.jpg','https://source.unsplash.com/600x400/?basket,handmade','https://source.unsplash.com/600x400/?weave','https://source.unsplash.com/600x400/?craft'], images:['https://source.unsplash.com/1200x800/?basket,handmade','https://source.unsplash.com/1200x800/?woven','https://source.unsplash.com/1200x800/?baskets'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:3, name:'Decorative Frame', price:'599', description:'A decorative frame to showcase your favorite memories.', main:'product3.jpg', thumbs:['product3.jpg','https://source.unsplash.com/600x400/?frame,decor','https://source.unsplash.com/600x400/?photo,frame','https://source.unsplash.com/600x400/?wood,frame'], images:['https://source.unsplash.com/1200x800/?frame,decor','https://source.unsplash.com/1200x800/?photo,frame','https://source.unsplash.com/1200x800/?frame'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:4, name:'Handmade Wall Hanging', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'https://source.unsplash.com/600x400/?handmade,wallhanging', thumbs:['https://source.unsplash.com/600x400/?handmade,wallhanging','https://source.unsplash.com/600x400/?macrame','https://source.unsplash.com/600x400/?tapestry','https://source.unsplash.com/600x400/?decor'], images:['https://source.unsplash.com/1200x800/?wallhanging','https://source.unsplash.com/1200x800/?macrame','https://source.unsplash.com/1200x800/?tapestry'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:5, name:'Decorative Basket', price:'450', description:'Decorative basket made with traditional techniques.', main:'https://source.unsplash.com/600x400/?basket,decor', thumbs:['https://source.unsplash.com/600x400/?basket,decor','https://source.unsplash.com/600x400/?handicraft','https://source.unsplash.com/600x400/?woven','https://source.unsplash.com/600x400/?decor'], images:['https://source.unsplash.com/1200x800/?basket,decor','https://source.unsplash.com/1200x800/?woven,basket','https://source.unsplash.com/1200x800/?decorative,basket'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:6, name:'Photo Frame', price:'349', description:'Stylish photo frame with a rustic touch.', main:'https://source.unsplash.com/600x400/?frame,photo', thumbs:['https://source.unsplash.com/600x400/?frame,photo','https://source.unsplash.com/600x400/?frame,wood','https://source.unsplash.com/600x400/?photo,decor','https://source.unsplash.com/600x400/?picture,frame'], images:['https://source.unsplash.com/1200x800/?photo,frame','https://source.unsplash.com/1200x800/?wooden,frame','https://source.unsplash.com/1200x800/?picture,frame'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:7, name:'Ceramic Pot', price:'549', description:'Hand-thrown ceramic pot, perfect for plants.', main:'https://source.unsplash.com/600x400/?pottery,ceramic', thumbs:['https://source.unsplash.com/600x400/?pottery,ceramic','https://source.unsplash.com/600x400/?plant,pot','https://source.unsplash.com/600x400/?clay,pot','https://source.unsplash.com/600x400/?ceramic,pot'], images:['https://source.unsplash.com/1200x800/?ceramic,pot','https://source.unsplash.com/1200x800/?pottery','https://source.unsplash.com/1200x800/?clay,pot'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:8, name:'Scented Candle', price:'299', description:'Hand poured scented candle for a cozy atmosphere.', main:'https://source.unsplash.com/600x400/?candle,handmade', thumbs:['https://source.unsplash.com/600x400/?candle,handmade','https://source.unsplash.com/600x400/?scented,candle','https://source.unsplash.com/600x400/?soy,candle','https://source.unsplash.com/600x400/?decor'], images:['https://source.unsplash.com/1200x800/?candle,cozy','https://source.unsplash.com/1200x800/?scented,candle','https://source.unsplash.com/1200x800/?candle,decor'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:9, name:'Handloom Scarf', price:'799', description:'Soft handloom scarf woven with traditional patterns.', main:'https://source.unsplash.com/600x400/?handloom,scarf', thumbs:['https://source.unsplash.com/600x400/?handloom,scarf','https://source.unsplash.com/600x400/?scarf,handmade','https://source.unsplash.com/600x400/?textile,scarf','https://source.unsplash.com/600x400/?weave'], images:['https://source.unsplash.com/1200x800/?handloom,scarf','https://source.unsplash.com/1200x800/?scarf,handmade','https://source.unsplash.com/1200x800/?textiles'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:10, name:'Beaded Necklace', price:'649', description:'Hand-beaded necklace with vibrant colors.', main:'https://source.unsplash.com/600x400/?jewelry,handmade', thumbs:['https://source.unsplash.com/600x400/?jewelry,handmade','https://source.unsplash.com/600x400/?beads,necklace','https://source.unsplash.com/600x400/?necklace,handmade','https://source.unsplash.com/600x400/?craft'], images:['https://source.unsplash.com/1200x800/?beads,necklace','https://source.unsplash.com/1200x800/?handmade,jewelry','https://source.unsplash.com/1200x800/?necklace'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:11, name:'Handmade Notebook', price:'249', description:'Eco-friendly handmade notebook with recycled paper.', main:'https://source.unsplash.com/600x400/?notebook,handmade', thumbs:['https://source.unsplash.com/600x400/?notebook,handmade','https://source.unsplash.com/600x400/?stationery,handmade','https://source.unsplash.com/600x400/?paper,notebook','https://source.unsplash.com/600x400/?journal'], images:['https://source.unsplash.com/1200x800/?notebook,handmade','https://source.unsplash.com/1200x800/?journal,handmade','https://source.unsplash.com/1200x800/?stationery'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
-      { id:12, name:'Serving Tray', price:'899', description:'Handcrafted serving tray with elegant finish.', main:'https://source.unsplash.com/600x400/?tray,handmade', thumbs:['https://source.unsplash.com/600x400/?tray,handmade','https://source.unsplash.com/600x400/?serving,tray','https://source.unsplash.com/600x400/?wood,tray','https://source.unsplash.com/600x400/?decor'], images:['https://source.unsplash.com/1200x800/?tray,handmade','https://source.unsplash.com/1200x800/?serving,tray','https://source.unsplash.com/1200x800/?wooden,tray'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'}
+      { id:1, name:'Handmade Vase', price:'499', description:'A beautiful handmade vase crafted with care.', main:'images/product1/image1.jpg',thumbs:['images/product1/image1.svg','images/product1/image1.jpg','images/product1/image2.jpg','images/product1/image3.jpg'], images:['images/product1/image1.svg','','images/product1/image2.jpg','images/product1/image3.jpg'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
+      { id:2, name:'Woven Basket', price:'399', description:'Handwoven basket perfect for home storage.', main:'images/product2/image1.jpg', thumbs:['images/product2/image1.svg','images/product2/image1.jpg','images/product2/image2.jpg','images/product2/image3.jpg'], images:['images/product2/image1.svg','','images/product2/image2.jpg','images/product2/image3.jpg'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
+      { id:3, name:'Decorative Frame', price:'599', description:'A decorative frame to showcase your favorite memories.', main:'images/product3/image1.jpg', thumbs:['images/product3/image1.svg','images/product3/image1.jpg','images/product3/image2.jpg','images/product3/image3.jpg'], images:['images/product3/image1.svg','','images/product3/image2.jpg','images/product3/image3.jpg'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
+      { id:4, name:'Handmade Wall Hanging', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product4/image1.jpg', thumbs:['images/product4/image1.svg','images/product4/image1.jpg','images/product4/image2.jpg','images/product4/image3.jpg'], images:['images/product4/image1.svg','images/product4/image2.jpg','images/product4/image3.jpg'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
+      { id:5, name:'Decorative Basket', price:'450', description:'Decorative basket made with traditional techniques.', main:'images/product5/image1.jpg', thumbs:['images/product5/image1.svg','images/product5/image1.jpg','images/product5/image2.jpg','images/product5/image3.jpg'], images:['images/product5/image1.svg','','images/product5/image2.jpg','images/product5/image3.jpg'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
+      { id:6, name:'Photo Frame', price:'349', description:'Stylish photo frame with a rustic touch.', main:'https://source.unsplash.com/600x400/?frame,photo', thumbs:['images/product6/image1.svg','images/product6/image1.jpg','images/product6/image2.jpg','images/product6/image3.jpg'], images:['images/product5/image1.svg','','images/product5/image2.jpg','images/product5/image3.jpg'], video:'https://www.youtube.com/embed/M7lc1UVf-VE'},
     ];
 
     // Utility to get query params
@@ -101,7 +95,8 @@
         const img = document.createElement('img');
         img.src = src;
         img.className = 'w-full h-24 object-cover rounded cursor-pointer';
-        img.onclick = () => { document.getElementById('mainImage').src = src; };
+        img.onerror = function(){ this.onerror=null; this.src='./images/placeholder.svg'; };
+        img.onclick = () => { const m = document.getElementById('mainImage'); m.src = src; m.onerror = function(){ this.onerror=null; this.src='./images/placeholder.svg'; }; };
         thumbs.appendChild(img);
       });
 
@@ -123,6 +118,12 @@
     document.addEventListener('DOMContentLoaded', () => {
       const id = getQueryParam('id') || '1';
       populateProduct(id);
+      // Log missing images to console to help debug missing assets
+      document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', (e) => {
+          console.warn('Image failed to load:', e.target.src);
+        });
+      });
     });
   </script>
 </body>
