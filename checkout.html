@@ -24,7 +24,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
       <h2 class="text-2xl font-bold mb-4">Checkout</h2>
 
-      <form id="checkoutForm" action="https://formsubmit.co/artcreation175@gmail.com" method="POST">
+      <form id="checkoutForm" action="https://formsubmit.co/artcreation170@gmail.com" method="POST">
         <div id="fileProtocolNotice" class="mb-4 p-3 rounded border-l-4 border-yellow-400 bg-yellow-50 text-yellow-800 hidden">
           You're viewing this page directly as a file. FormSubmit requires the page to be served over HTTP/HTTPS.
           For local testing either run a local web server or use the fallback button below to open your mail client.
@@ -119,7 +119,7 @@
 
       <div class="mt-4 p-4 border rounded bg-gray-50">
         <h6 class="font-semibold mb-2">Email delivery (free)</h6>
-        <p class="text-sm text-gray-600 mb-2">This form will POST to FormSubmit.co (free simple email forwarding). No client setup required — emails will be sent to <strong>artcreation175@gmail.com</strong>. To change the destination email edit the form's `action` attribute.</p>
+        <p class="text-sm text-gray-600 mb-2">This form will POST to FormSubmit.co (free simple email forwarding). No client setup required — emails will be sent to <strong>artcreation170@gmail.com</strong>. To change the destination email edit the form's `action` attribute.</p>
         <p class="text-sm text-gray-600">After you place an order you'll receive an email containing the order details and a short workflow explaining next steps (confirmation, preparation, and expected timelines). Note: FormSubmit may ask you to confirm the destination email on first use.</p>
       </div>
     </div>
@@ -376,7 +376,7 @@
           const subject = `New Order: ${product} — ${name || 'Local Test'}`;
           const body = `Order Details:\nProduct: ${product}\nPrice: INR ${price}\nName: ${name}\nPhone: ${phone}\nAddress: ${address}`;
           // Open mail client
-          window.location.href = 'mailto:artcreation175@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          window.location.href = 'mailto:artcreation170@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
         });
 
         document.getElementById('howToServer').addEventListener('click', function(){
@@ -448,7 +448,7 @@
         const subjectInput = document.getElementById('_subject');
         const messageInput = document.getElementById('_message');
         const subjectText = `New Order: ${data.product} — ${data.name}`;
-        const workflow = `Workflow:\n1) We received your order and will confirm availability within 24 hours.\n2) Once confirmed we prepare the item (1-3 business days).\n3) You'll receive shipment details and tracking when dispatched.\n4) Contact artcreation175@gmail.com for support.`;
+        const workflow = `Workflow:\n1) We received your order and will confirm availability within 24 hours.\n2) Once confirmed we prepare the item (1-3 business days).\n3) You'll receive shipment details and tracking when dispatched.\n4) Contact artcreation170@gmail.com for support.`;
         const messageText = `Order Details:\nProduct: ${data.product}\nPrice: INR ${data.price}\nName: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}\n\n${workflow}`;
         if (subjectInput) subjectInput.value = subjectText;
         if (messageInput) messageInput.value = messageText;
