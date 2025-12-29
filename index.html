@@ -7,21 +7,24 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <!-- Bootstrap CSS (for carousel) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- YouTube subscribe widget -->
-  <script src="https://apis.google.com/js/platform.js"></script>
+  <!-- YouTube subscribe widget (load async) -->
+  <script src="https://apis.google.com/js/platform.js" async></script>
   <style>
     /* Social icon styles */
     .social-inline { display:flex; gap:10px; align-items:center; }
     .social-btn { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:8px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); text-decoration:none; color:#111; }
     .social-icon { width:20px; height:20px; display:inline-block }
   </style>
-  <!-- Razorpay Checkout Script -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <!-- Razorpay Checkout Script (deferred) -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js" defer></script>
   <script>
-    (function(){
-      emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
-    })();
+    // Initialize emailjs after DOM is ready (emailjs script is deferred)
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.emailjs && typeof emailjs.init === 'function') {
+        emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
+      }
+    });
   </script>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -30,7 +33,7 @@
   <header class="bg-white shadow">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center">
-        <img src="logo.jpg" alt="Art and Creation Logo" class="h-12 w-12 mr-3 rounded-full object-cover bg-white">
+        <img src="logo.jpg" alt="Art and Creation Logo" class="h-12 w-12 mr-3 rounded-full object-cover bg-white" loading="lazy">
         <h1 class="text-2xl font-bold text-pink-600">Art and Creation</h1>
       </div>
       <nav>
@@ -121,7 +124,7 @@
 
         <!-- Product Card 6 -->
         <div class="bg-white shadow-md rounded-xl overflow-hidden text-center">
-          <img src="https://source.unsplash.com/600x400/?frame,decor" alt="Photo Frame" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" />
+          <img src="https://source.unsplash.com/600x400/?frame,decor" alt="Photo Frame" class="h-48 w-full mx-auto mt-6 rounded-lg object-cover" loading="lazy" />
           <div class="p-6">
             <h4 class="text-xl font-bold text-gray-700">Photo Frame</h4>
             <p class="text-pink-600 font-semibold mt-2">₹349</p>
