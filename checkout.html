@@ -52,10 +52,16 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label font-semibold">Email</label>
+          <input id="buyerEmail" name="email" type="email" class="w-full border rounded px-3 py-2" required />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label font-semibold">Phone number</label>
           <div class="flex gap-2">
             <input id="buyerPhone" name="phone" type="tel" class="flex-1 border rounded px-3 py-2" placeholder="Enter phone (10-15 digits)" required />
             <button id="sendOtpBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Send OTP</button>
+            <div id="recaptcha-container" class="hidden"></div>
           </div>
           <div id="otpNote" class="text-sm text-gray-500 mt-2">OTP will be sent to the phone number (demo mode).</div>
         </div>
@@ -131,8 +137,31 @@
 
   <!-- Using FormSubmit.co for email delivery; no client SDK required -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase (compat) - replace config below with your project's values -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="js/webp-swap.js" defer></script>
   <script>
+    // Firebase configuration placeholder - REPLACE with your values
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    const firebaseEnabled = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.apiKey !== 'YOUR_API_KEY';
+    let firebaseAuth = null;
+    let confirmationResult = null;
+    if (firebaseEnabled) {
+      try {
+        firebase.initializeApp(firebaseConfig);
+        firebaseAuth = firebase.auth();
+      } catch (e) {
+        console.warn('Firebase init failed', e);
+      }
+    }
     // Copy of products data (6 products)
     const products = [
       { id:1, name:'Handmade Vase', price:'499' },
@@ -196,6 +225,55 @@
       startResendCooldown();
     }
 
+    // Firebase-based OTP send (if configured)
+    function sendOtpFirebase() {
+      if (!firebaseEnabled || !firebaseAuth) {
+        sendOtpDemo();
+        return;
+      }
+      const phoneEl = document.getElementById('buyerPhone');
+      const phoneRaw = (phoneEl.value || '').trim();
+      const digits = phoneRaw.replace(/\D/g, '');
+      if (!/^\d{10,15}$/.test(digits)) {
+        const note = document.getElementById('otpNote');
+        note.textContent = 'Please enter a valid phone number (10-15 digits).';
+        note.className = 'text-sm text-red-600 mt-2';
+        return;
+      }
+      // Normalize to E.164: if 10 digits assume +91
+      let phoneE164 = phoneRaw;
+      if (digits.length === 10) phoneE164 = '+91' + digits;
+      else if (phoneRaw.startsWith('+')) phoneE164 = '+' + digits;
+      else phoneE164 = '+' + digits;
+
+      // Create or reuse invisible reCAPTCHA
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
+          window.recaptchaVerifier.render();
+        }
+        firebaseAuth.signInWithPhoneNumber(phoneE164, window.recaptchaVerifier)
+          .then(function (result) {
+            confirmationResult = result;
+            const note = document.getElementById('otpNote');
+            note.innerHTML = 'OTP sent via SMS. Please enter the code and click Verify.';
+            note.className = 'text-sm text-gray-700 mt-2';
+            document.getElementById('submitBtn').disabled = true;
+            updateSubmitState();
+          }).catch(function (err) {
+            console.error('Firebase SMS error', err);
+            const note = document.getElementById('otpNote');
+            note.textContent = 'Failed to send OTP via Firebase: ' + (err && err.message ? err.message : err);
+            note.className = 'text-sm text-red-600 mt-2';
+            // fallback to demo
+            // sendOtpDemo();
+          });
+      } catch (e) {
+        console.error(e);
+        sendOtpDemo();
+      }
+    }
+
     function verifyOtp() {
       const entered = (document.getElementById('otpInput').value || '').trim();
       const status = document.getElementById('otpStatus');
@@ -237,6 +315,31 @@
         status.className = 'text-sm text-red-600 mt-1';
         updateSubmitState();
       }
+    }
+
+    // Verify OTP when using Firebase
+    function verifyOtpFirebase() {
+      const code = (document.getElementById('otpInput').value || '').trim();
+      const status = document.getElementById('otpStatus');
+      if (!confirmationResult) {
+        status.textContent = 'No OTP request found. Please request an OTP first.';
+        status.className = 'text-sm text-red-600 mt-1';
+        return;
+      }
+      confirmationResult.confirm(code).then(function (result) {
+        otpVerified = true;
+        status.textContent = 'Phone verified ✓';
+        status.className = 'text-sm text-green-600 mt-1';
+        confirmationResult = null;
+        clearResendCooldown();
+        updateSubmitState();
+      }).catch(function (err) {
+        console.error('Verification failed', err);
+        otpVerified = false;
+        status.textContent = 'Incorrect OTP or verification failed.';
+        status.className = 'text-sm text-red-600 mt-1';
+        updateSubmitState();
+      });
     }
 
     function startResendCooldown() {
@@ -395,9 +498,13 @@
         }
       }
 
-      // OTP handlers
-      document.getElementById('sendOtpBtn').addEventListener('click', sendOtpDemo);
-      document.getElementById('verifyOtpBtn').addEventListener('click', verifyOtp);
+      // OTP handlers (use Firebase if configured)
+      document.getElementById('sendOtpBtn').addEventListener('click', function(){
+        if (firebaseEnabled) sendOtpFirebase(); else sendOtpDemo();
+      });
+      document.getElementById('verifyOtpBtn').addEventListener('click', function(){
+        if (firebaseEnabled) verifyOtpFirebase(); else verifyOtp();
+      });
 
       // Input listeners to update submit state
       const nameEl = document.getElementById('buyerName');
@@ -434,6 +541,7 @@
           product: document.getElementById('prodName').value,
           price: document.getElementById('prodPrice').value,
           name: document.getElementById('buyerName').value.trim(),
+          email: (document.getElementById('buyerEmail') && document.getElementById('buyerEmail').value.trim()) || '',
           phone: document.getElementById('buyerPhone').value.trim(),
           address: document.getElementById('buyerAddress').value.trim()
         };
@@ -449,7 +557,7 @@
         const messageInput = document.getElementById('_message');
         const subjectText = `New Order: ${data.product} — ${data.name}`;
         const workflow = `Workflow:\n1) We received your order and will confirm availability within 24 hours.\n2) Once confirmed we prepare the item (1-3 business days).\n3) You'll receive shipment details and tracking when dispatched.\n4) Contact artcreation170@gmail.com for support.`;
-        const messageText = `Order Details:\nProduct: ${data.product}\nPrice: INR ${data.price}\nName: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}\n\n${workflow}`;
+        const messageText = `Order Details:\nProduct: ${data.product}\nPrice: INR ${data.price}\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nAddress: ${data.address}\n\n${workflow}`;
         if (subjectInput) subjectInput.value = subjectText;
         if (messageInput) messageInput.value = messageText;
 
