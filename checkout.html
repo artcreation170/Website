@@ -15,120 +15,84 @@
           <img src="logo.jpg" alt="Art and Creation Logo" class="rounded-circle" style="height:48px;width:48px;object-fit:cover;margin-right:8px" loading="lazy">
           <span class="h5 mb-0 text-pink-600">Art and Creation</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainNavbar">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="index.html">Shop</a></li>
-            <li class="nav-item"><a class="nav-link" href="checkout.html">Checkout</a></li>
-            <li class="nav-item"><a class="nav-link" href="thankyou.html">Orders</a></li>
-          </ul>
-        </div>
       </div>
     </nav>
   </header>
 
   <main class="container mx-auto px-6 py-12">
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4">Checkout</h2>
+      <h2 class="text-2xl font-bold mb-6 text-pink-600">Checkout</h2>
 
       <form id="checkoutForm" action="https://formsubmit.co/artcreation170@gmail.com" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="_subject" id="_subject" value="New Order">
+        <input type="hidden" name="_subject" value="New Order">
         <input type="hidden" name="_next" value="thankyou.html">
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="receipt" id="field_receipt" value="">
-        <input type="hidden" name="payment_method" id="field_payment_method" value="RAZORPAY_UPI">
-        <input type="hidden" name="payment_status" id="field_payment_status" value="Pending">
-        <input type="hidden" name="transaction_id" id="field_transaction_id" value="">
-        <input type="hidden" name="product" id="field_product" value="">
-        <input type="hidden" name="price" id="field_price" value="">
-        <input type="hidden" name="created_at" id="field_created_at" value="">
+        <input type="hidden" id="_payment_status" name="_payment_status" value="Pending">
+        <input type="hidden" id="field_product" name="product" value="">
+        <input type="hidden" id="field_price" name="price" value="">
 
+        <!-- Product Info -->
         <div class="mb-3">
           <label class="form-label font-semibold">Product</label>
-          <input id="prodName" name="product_visible" type="text" class="w-full border rounded px-3 py-2" readonly />
+          <input id="prodName" name="product_visible" type="text" class="w-full border rounded px-3 py-2 bg-gray-100" readonly />
         </div>
 
         <div class="mb-3">
           <label class="form-label font-semibold">Price (INR)</label>
-          <input id="prodPrice" name="price_visible" type="text" class="w-full border rounded px-3 py-2" readonly />
+          <input id="prodPrice" name="price_visible" type="text" class="w-full border rounded px-3 py-2 bg-gray-100" readonly />
         </div>
 
+        <!-- Customer Info -->
         <div class="mb-3">
           <label class="form-label font-semibold">Full Name</label>
-          <input id="buyerName" name="name" type="text" class="w-full border rounded px-3 py-2" required />
+          <input id="buyerName" name="name" type="text" class="w-full border rounded px-3 py-2" required placeholder="Enter your full name" />
         </div>
 
         <div class="mb-3">
           <label class="form-label font-semibold">Email</label>
-          <input id="buyerEmail" name="email" type="email" class="w-full border rounded px-3 py-2" required />
+          <input id="buyerEmail" name="email" type="email" class="w-full border rounded px-3 py-2" required placeholder="Enter your email" />
         </div>
 
         <div class="mb-3">
           <label class="form-label font-semibold">Phone number</label>
-          <input id="buyerPhone" name="phone" type="tel" class="w-full border rounded px-3 py-2" required />
+          <input id="buyerPhone" name="phone" type="tel" class="w-full border rounded px-3 py-2" required placeholder="Enter your phone number" />
         </div>
 
         <div class="mb-3">
           <label class="form-label font-semibold">Address</label>
-          <textarea id="buyerAddress" name="address" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
+          <textarea id="buyerAddress" name="address" class="w-full border rounded px-3 py-2" rows="3" required placeholder="Enter your delivery address"></textarea>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label font-semibold">Payment screenshot (optional)</label>
-          <input id="paymentScreenshot" name="payment_screenshot" type="file" accept="image/*" class="w-full border rounded px-3 py-2" />
-          <p class="text-sm text-gray-500 mt-1">If you paid via QR/UPI, upload a screenshot for faster verification.</p>
-        </div>
-
+        <!-- Payment Details -->
         <div class="mb-3">
           <label class="form-label font-semibold">Transaction ID (if available)</label>
-          <input id="qrTxnId" name="qr_txn_id" type="text" class="w-full border rounded px-3 py-2" placeholder="UPI / bank txn id (optional)" />
+          <input id="qrTxnId" name="transaction_id" type="text" class="w-full border rounded px-3 py-2" placeholder="Enter your transaction ID" />
         </div>
 
+        <div class="mb-3">
+          <label class="form-label font-semibold">Payment Screenshot</label>
+          <input id="paymentScreenshot" name="payment_screenshot" type="file" accept="image/*" class="w-full border rounded px-3 py-2" />
+          <p class="text-sm text-gray-500 mt-1">Upload your payment screenshot to verify payment faster.</p>
+        </div>
+
+        <!-- QR Payment -->
         <div class="mb-4 border-t pt-4">
-          <label class="form-label font-semibold">Payment Method</label>
+          <label class="form-label font-semibold">Payment Method (QR only)</label>
           <div class="mt-2">
-            <label class="inline-flex items-center mr-4">
-              <input type="radio" name="payment_method_choice" value="RAZORPAY_UPI" id="payUpiRadio" class="form-radio" checked />
-              <span class="ml-2">Razorpay UPI (checkout)</span>
-            </label>
-            <label class="inline-flex items-center">
-              <input type="radio" name="payment_method_choice" value="RAZORPAY_QR" id="payQrRadio" class="form-radio" />
-              <span class="ml-2">QR (scan)</span>
-            </label>
+            <button id="generateQrBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Show QR Code</button>
+            <button id="confirmQrPaidBtn" type="button" class="bg-green-600 text-white px-4 py-2 rounded ml-2">I have paid</button>
           </div>
-
-          <div id="upiPanel" class="mt-3">
-            <div class="mb-2">
-              <button id="upiPayBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Pay via Razorpay (UPI)</button>
-              <div id="upiStatus" class="self-center text-sm text-gray-600 inline-block ml-3"></div>
-            </div>
-            <p class="text-sm text-gray-500">Razorpay Checkout will open. Complete payment to finalize order.</p>
+          <div id="qrContainer" class="mt-3">
+            <p id="qrStatus" class="text-sm text-gray-600 mt-1">No QR shown yet.</p>
+            <img id="qrImage" src="" alt="QR code" class="mt-2 max-w-xs border rounded hidden" />
           </div>
-
-          <div id="qrPanel" class="mt-3 hidden">
-            <div class="mb-2">
-              <button id="generateQrBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Show QR</button>
-              <button id="confirmQrPaidBtn" type="button" class="bg-green-600 text-white px-4 py-2 rounded ml-2">I have paid (confirm)</button>
-            </div>
-            <div id="qrContainer" class="mt-2">
-              <p id="qrStatus" class="text-sm text-gray-600">No QR shown yet.</p>
-              <img id="qrImage" src="" alt="QR code" class="mt-2 max-w-xs border rounded hidden" />
-            </div>
-          </div>
-
-          <input type="hidden" id="_payment_method" name="_payment_method" value="RAZORPAY_UPI">
-          <input type="hidden" id="_payment_status" name="_payment_status" value="Pending">
-          <input type="hidden" id="_payment_txn" name="_payment_txn" value="">
         </div>
 
-        <div class="flex items-center justify-between">
-          <button id="submitBtn" type="submit" class="bg-pink-600 text-white px-4 py-2 rounded">Place Order</button>
+        <div class="flex items-center justify-between mt-6">
+          <button id="submitBtn" type="submit" class="bg-pink-600 text-white px-4 py-2 rounded" disabled>Place Order</button>
           <a href="index.html" class="text-sm text-gray-600">Cancel</a>
         </div>
       </form>
-
     </div>
   </main>
 
@@ -136,8 +100,6 @@
     <p>&copy; 2025 Art and Creation. All rights reserved.</p>
   </footer>
 
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const products = [
       { id:1, name:'Mandala Photoframe', price:'499' },
@@ -177,124 +139,97 @@
       return null;
     }
 
-    function finalizeOrder(orderMeta){
+    function finalizeOrder(meta){
       const receipt='rcpt_'+Date.now();
       const order={
         receipt,
-        product:orderMeta.product,
-        price:orderMeta.price,
-        name:orderMeta.name,
-        email:orderMeta.email,
-        phone:orderMeta.phone,
-        address:orderMeta.address,
-        payment_method:document.getElementById('_payment_method').value,
+        product:meta.product,
+        price:meta.price,
+        name:meta.name,
+        email:meta.email,
+        phone:meta.phone,
+        address:meta.address,
+        transaction_id:meta.transaction_id||'',
         payment_status:document.getElementById('_payment_status').value,
-        payment_txn:document.getElementById('_payment_txn').value,
         created_at: new Date().toISOString()
       };
-      localStorage.setItem('lastOrder', JSON.stringify(order));
 
-      // Native form submit to FormSubmit
-      (function sendOrderEmailNative(){
-        try {
-          const endpoint='https://formsubmit.co/artcreation170@gmail.com';
-          const f=document.createElement('form');
-          f.method='POST'; f.action=endpoint; f.enctype='multipart/form-data'; f.style.display='none';
-          f.target='gf_iframe';
-          const addHidden=(name,value)=>{ const i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=value||''; f.appendChild(i);}
-          addHidden('_subject',`New Order: ${order.product} — ${order.name}`);
-          addHidden('receipt',order.receipt);
-          addHidden('product',order.product);
-          addHidden('price',order.price);
-          addHidden('name',order.name);
-          addHidden('email',order.email||'');
-          addHidden('phone',order.phone);
-          addHidden('address',order.address);
-          addHidden('payment_method',order.payment_method);
-          addHidden('payment_status',order.payment_status);
-          addHidden('transaction_id',order.payment_txn||'');
-          addHidden('created_at',order.created_at);
-          addHidden('_next',window.location.origin+'/thankyou.html');
-          addHidden('_captcha','false');
+      // Append hidden inputs for transaction and file
+      const form = document.getElementById('checkoutForm');
+      const txnInput = document.createElement('input');
+      txnInput.type='hidden'; txnInput.name='transaction_id'; txnInput.value=order.transaction_id;
+      form.appendChild(txnInput);
 
-          const fileInput=document.getElementById('paymentScreenshot');
-          if(fileInput && fileInput.files && fileInput.files.length) f.appendChild(fileInput);
+      alert('Payment confirmed and order placed successfully!');
 
-          if(!document.querySelector('iframe[name="gf_iframe"]')){
-            const ifr=document.createElement('iframe'); ifr.name='gf_iframe'; ifr.style.display='none'; document.body.appendChild(ifr);
-          }
-
-          document.body.appendChild(f); f.submit();
-          setTimeout(()=>{ try{ if(fileInput) document.body.appendChild(fileInput); document.body.removeChild(f);} catch(e){} },1500);
-        } catch(e){ console.error('Order email submit failed',e);}
-      })();
-      window.location.href='thankyou.html?receipt='+encodeURIComponent(order.receipt);
+      form.submit();
+       window.location.href='thankyou.html?receipt='+encodeURIComponent(order.receipt);
     }
 
     document.addEventListener('DOMContentLoaded',()=>{
       populateCheckout();
-      const upiRadio=document.getElementById('payUpiRadio');
-      const qrRadio=document.getElementById('payQrRadio');
-      const upiPayBtn=document.getElementById('upiPayBtn');
-      const genQrBtn=document.getElementById('generateQrBtn');
-      const confirmBtn=document.getElementById('confirmQrPaidBtn');
 
-      function setPaymentMethodUI(method){
-        const upiPanel=document.getElementById('upiPanel');
-        const qrPanel=document.getElementById('qrPanel');
-        if(upiPanel) upiPanel.classList.toggle('hidden',method!=='RAZORPAY_UPI');
-        if(qrPanel) qrPanel.classList.toggle('hidden',method!=='RAZORPAY_QR');
-        document.getElementById('_payment_method').value=method;
-        document.getElementById('_payment_status').value='Pending';
-        document.getElementById('_payment_txn').value='';
+      const submitBtn = document.getElementById('submitBtn');
+      const requiredFields = ['buyerName','buyerEmail','buyerPhone','buyerAddress'];
+
+      function checkFormReady() {
+        const allFilled = requiredFields.every(id=>document.getElementById(id).value.trim()!=='');
+        const paid = document.getElementById('_payment_status').value==='Paid';
+        submitBtn.disabled = !(allFilled && paid);
       }
 
-      if(upiRadio) upiRadio.addEventListener('change',()=>setPaymentMethodUI('RAZORPAY_UPI'));
-      if(qrRadio) qrRadio.addEventListener('change',()=>setPaymentMethodUI('RAZORPAY_QR'));
+      requiredFields.forEach(id=>{
+        document.getElementById(id).addEventListener('input', checkFormReady);
+      });
 
-      if(genQrBtn) genQrBtn.addEventListener('click',async ()=>{
-        const product=document.getElementById('prodName').value||'';
-        const qrStatus=document.getElementById('qrStatus');
-        const qrImg=document.getElementById('qrImage');
+      document.getElementById('generateQrBtn').addEventListener('click', async()=>{
+        const product = document.getElementById('prodName').value||'';
+        const qrStatus = document.getElementById('qrStatus');
+        const qrImg = document.getElementById('qrImage');
         qrStatus.textContent='Searching for static QR...';
-        const path=await findStaticQrForProduct(product);
-        if(path){ qrImg.src=path; qrImg.classList.remove('hidden'); qrStatus.textContent='Scan the QR with your UPI app to pay.'; document.getElementById('_payment_status').value='QR Shown';}
-        else qrStatus.textContent='No static QR found. Provide a static QR image under images/qrcodes/.';
+        const path = await findStaticQrForProduct(product);
+        if(path){
+          qrImg.src = path;
+          qrImg.classList.remove('hidden');
+          qrStatus.textContent='Scan the QR with your UPI app to pay.';
+        } else {
+          qrStatus.textContent='No static QR found for this product.';
+        }
       });
 
-      if(confirmBtn) confirmBtn.addEventListener('click',()=>{
-        const txn=document.getElementById('qrTxnId').value||'';
-        const fileInput=document.getElementById('paymentScreenshot');
-        const hasFile=fileInput && fileInput.files && fileInput.files[0];
-        if(!txn && !hasFile){ alert('Please upload screenshot or enter txn ID before confirming payment.'); return;}
-        document.getElementById('_payment_method').value='RAZORPAY_QR';
-        document.getElementById('_payment_status').value='Paid (manual-confirm)';
-        if(txn) document.getElementById('_payment_txn').value=txn;
-        const meta={
-          product:document.getElementById('prodName').value,
-          price:document.getElementById('prodPrice').value,
-          name:document.getElementById('buyerName').value.trim(),
-          email:document.getElementById('buyerEmail').value.trim(),
-          phone:document.getElementById('buyerPhone').value.trim(),
-          address:document.getElementById('buyerAddress').value.trim()
-        };
-        finalizeOrder(meta);
+      document.getElementById('confirmQrPaidBtn').addEventListener('click',()=>{
+        const txn = document.getElementById('qrTxnId').value.trim();
+        const fileInput = document.getElementById('paymentScreenshot');
+        const hasFile = fileInput && fileInput.files && fileInput.files.length>0;
+        if(!txn && !hasFile){
+          alert('Please upload screenshot or enter txn ID before confirming payment.');
+          return;
+        }
+        document.getElementById('_payment_status').value='Paid';
+        alert('Payment confirmed successfully! You can now place your order.');
+        checkFormReady();
       });
 
-      document.getElementById('checkoutForm').addEventListener('submit',e=>{
+      document.getElementById('checkoutForm').addEventListener('submit', e=>{
         e.preventDefault();
+        const allFilled = requiredFields.every(id=>document.getElementById(id).value.trim()!=='');
+        const paid = document.getElementById('_payment_status').value==='Paid';
+        if(!allFilled){ alert('Please fill all required fields.'); return; }
+        if(!paid){ alert('Please confirm payment before submitting the order.'); return; }
+
         const meta={
           product:document.getElementById('prodName').value,
           price:document.getElementById('prodPrice').value,
           name:document.getElementById('buyerName').value.trim(),
           email:document.getElementById('buyerEmail').value.trim(),
           phone:document.getElementById('buyerPhone').value.trim(),
-          address:document.getElementById('buyerAddress').value.trim()
+          address:document.getElementById('buyerAddress').value.trim(),
+          transaction_id:document.getElementById('qrTxnId').value.trim()
         };
         finalizeOrder(meta);
       });
 
-      setPaymentMethodUI('RAZORPAY_UPI');
+      checkFormReady();
     });
   </script>
 </body>
