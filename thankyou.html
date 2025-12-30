@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thank you - Art and Creation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans">
+  <main class="container mx-auto px-6 py-24 max-w-2xl">
+    <div id="content" class="bg-white p-8 rounded shadow text-center">
+      <h1 class="text-2xl font-bold mb-4">Thank you for your order!</h1>
+      <p id="summary" class="text-gray-700 mb-6">Preparing your details...</p>
+      <a href="index.html" class="inline-block bg-pink-600 text-white px-4 py-2 rounded">Back to Shop</a>
+    </div>
+  </main>
+
+  <script>
+    function renderOrder() {
+      const raw = localStorage.getItem('lastOrder');
+      if (!raw) {
+        document.getElementById('summary').textContent = 'We could not find the order details. If you completed a payment, contact support.';
+        return;
+      }
+      try {
+        const o = JSON.parse(raw);
+        const el = document.getElementById('summary');
+        el.innerHTML = `
+          <strong>Receipt:</strong> ${o.receipt}<br>
+          <strong>Product:</strong> ${o.product} — INR ${o.price}<br>
+          <strong>Name:</strong> ${o.name}<br>
+          <strong>Phone:</strong> ${o.phone}<br>
+          <strong>Payment:</strong> ${o.payment_method} — ${o.payment_status}<br>
+          <strong>Txn:</strong> ${o.payment_txn || 'N/A'}<br>
+          <p class="mt-3 text-sm text-gray-600">You will receive confirmation and shipping details from Art and Creation soon.</p>
+        `;
+      } catch (e) {
+        document.getElementById('summary').textContent = 'Error reading order details.';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', renderOrder);
+  </script>
+</body>
+</html>

@@ -15,7 +15,10 @@
         <h1 class="text-2xl font-bold text-pink-600">Art and Creation</h1>
       </div>
       <nav>
-        <a href="index.html" class="text-gray-700 px-4">Back to Shop</a>
+        <a href="index.html" class="text-gray-700 px-4 flex items-center">
+          <img src="logo.jpg" alt="Logo" class="h-6 w-6 mr-2 rounded-full object-cover" loading="lazy">
+          Back to Shop
+        </a>
       </nav>
     </div>
   </header>
@@ -24,26 +27,36 @@
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
       <h2 class="text-2xl font-bold mb-4">Checkout</h2>
 
-      <form id="checkoutForm" action="https://formsubmit.co/artcreation170@gmail.com" method="POST">
+      <!-- Note: form no longer posts directly to FormSubmit when using JS flows; JS will submit via native form POST for attachment support. -->
+      <form id="checkoutForm" action="https://formsubmit.co/artcreation170@gmail.com" method="POST" enctype="multipart/form-data">
         <div id="fileProtocolNotice" class="mb-4 p-3 rounded border-l-4 border-yellow-400 bg-yellow-50 text-yellow-800 hidden">
           You're viewing this page directly as a file. FormSubmit requires the page to be served over HTTP/HTTPS.
-          For local testing either run a local web server or use the fallback button below to open your mail client.
+          For local testing run a local web server or use the fallback below to open your mail client.
           <div class="mt-2">
             <button id="openMailFallback" type="button" class="bg-yellow-600 text-white px-3 py-1 rounded mr-2">Open Mail Fallback</button>
             <button id="howToServer" type="button" class="bg-gray-200 px-3 py-1 rounded">How to run a server</button>
           </div>
         </div>
-        <input type="hidden" name="_next" value="index.html">
+
+        <input type="hidden" name="_subject" id="_subject" value="New Order">
+        <input type="hidden" name="_next" value="thankyou.html">
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" id="_subject" name="_subject" value="">
-        <input type="hidden" id="_message" name="message" value="">
+        <input type="hidden" name="receipt" id="field_receipt" value="">
+        <input type="hidden" name="payment_method" id="field_payment_method" value="RAZORPAY_UPI">
+        <input type="hidden" name="payment_status" id="field_payment_status" value="Pending">
+        <input type="hidden" name="transaction_id" id="field_transaction_id" value="">
+        <input type="hidden" name="product" id="field_product" value="">
+        <input type="hidden" name="price" id="field_price" value="">
+        <input type="hidden" name="created_at" id="field_created_at" value="">
+
         <div class="mb-3">
           <label class="form-label font-semibold">Product</label>
-          <input id="prodName" name="product" type="text" class="w-full border rounded px-3 py-2" readonly />
+          <input id="prodName" name="product_visible" type="text" class="w-full border rounded px-3 py-2" readonly />
         </div>
+
         <div class="mb-3">
           <label class="form-label font-semibold">Price (INR)</label>
-          <input id="prodPrice" name="price" type="text" class="w-full border rounded px-3 py-2" readonly />
+          <input id="prodPrice" name="price_visible" type="text" class="w-full border rounded px-3 py-2" readonly />
         </div>
 
         <div class="mb-3">
@@ -58,21 +71,7 @@
 
         <div class="mb-3">
           <label class="form-label font-semibold">Phone number</label>
-          <div class="flex gap-2">
-            <input id="buyerPhone" name="phone" type="tel" class="flex-1 border rounded px-3 py-2" placeholder="Enter phone (10-15 digits)" required />
-            <button id="sendOtpBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Send OTP</button>
-            <div id="recaptcha-container" class="hidden"></div>
-          </div>
-          <div id="otpNote" class="text-sm text-gray-500 mt-2">OTP will be sent to the phone number (demo mode).</div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label font-semibold">Enter OTP</label>
-          <div class="flex gap-2">
-            <input id="otpInput" type="text" class="flex-1 border rounded px-3 py-2" placeholder="6-digit OTP" />
-            <button id="verifyOtpBtn" type="button" class="bg-gray-200 px-4 py-2 rounded">Verify</button>
-          </div>
-          <div id="otpStatus" class="text-sm mt-2"></div>
+          <input id="buyerPhone" name="phone" type="tel" class="w-full border rounded px-3 py-2" required />
         </div>
 
         <div class="mb-3">
@@ -80,54 +79,63 @@
           <textarea id="buyerAddress" name="address" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
         </div>
 
-        <!-- Payment options -->
+        <div class="mb-3">
+          <label class="form-label font-semibold">Payment screenshot (optional)</label>
+          <input id="paymentScreenshot" name="payment_screenshot" type="file" accept="image/*" class="w-full border rounded px-3 py-2" />
+          <p class="text-sm text-gray-500 mt-1">If you paid via QR/UPI, upload a screenshot for faster verification.</p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label font-semibold">Transaction ID (if available)</label>
+          <input id="qrTxnId" name="qr_txn_id" type="text" class="w-full border rounded px-3 py-2" placeholder="UPI / bank txn id (optional)" />
+        </div>
+
+        <!-- Payment options (Razorpay UPI & QR) -->
         <div class="mb-4 border-t pt-4">
           <label class="form-label font-semibold">Payment Method</label>
           <div class="mt-2">
             <label class="inline-flex items-center mr-4">
-              <input type="radio" name="payment_method_choice" value="UPI" id="payUpiRadio" class="form-radio" />
-              <span class="ml-2">UPI (instant)</span>
+              <input type="radio" name="payment_method_choice" value="RAZORPAY_UPI" id="payUpiRadio" class="form-radio" checked />
+              <span class="ml-2">Razorpay UPI (checkout)</span>
             </label>
             <label class="inline-flex items-center">
-              <input type="radio" name="payment_method_choice" value="COD" id="payCodRadio" class="form-radio" checked />
-              <span class="ml-2">Cash on Delivery (COD)</span>
+              <input type="radio" name="payment_method_choice" value="RAZORPAY_QR" id="payQrRadio" class="form-radio" />
+              <span class="ml-2">QR (scan)</span>
             </label>
           </div>
 
-          <div id="upiPanel" class="mt-3 hidden">
-            <input id="upiId" type="text" placeholder="Enter UPI ID (example@bank)" class="w-full border rounded px-3 py-2 mb-2" />
-            <div class="flex gap-2">
-              <button id="upiPayBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Simulate UPI Pay</button>
-              <div id="upiStatus" class="self-center text-sm text-gray-600"></div>
+          <div id="upiPanel" class="mt-3">
+            <div class="mb-2">
+              <button id="upiPayBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Pay via Razorpay (UPI)</button>
+              <div id="upiStatus" class="self-center text-sm text-gray-600 inline-block ml-3"></div>
             </div>
+            <p class="text-sm text-gray-500">Razorpay Checkout will open. Complete payment to finalize order.</p>
           </div>
 
-          <input type="hidden" id="_payment_method" name="payment_method" value="COD">
-          <input type="hidden" id="_payment_status" name="payment_status" value="Pending - COD">
-          <input type="hidden" id="_payment_txn" name="payment_txn" value="">
+          <div id="qrPanel" class="mt-3 hidden">
+            <div class="mb-2">
+              <button id="generateQrBtn" type="button" class="bg-pink-600 text-white px-4 py-2 rounded">Show QR</button>
+              <button id="confirmQrPaidBtn" type="button" class="bg-green-600 text-white px-4 py-2 rounded ml-2">I have paid (confirm)</button>
+            </div>
+            <div id="qrContainer" class="mt-2">
+              <p id="qrStatus" class="text-sm text-gray-600">No QR shown yet.</p>
+              <img id="qrImage" src="" alt="QR code" class="mt-2 max-w-xs border rounded hidden" />
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Place a static QR at images/qrcodes/PRODUCT_SLUG.png for display or let server create Razorpay QR.</p>
+          </div>
+
+          <input type="hidden" id="_payment_method" name="_payment_method" value="RAZORPAY_UPI">
+          <input type="hidden" id="_payment_status" name="_payment_status" value="Pending">
+          <input type="hidden" id="_payment_txn" name="_payment_txn" value="">
         </div>
 
         <div class="flex items-center justify-between">
-          <button id="submitBtn" type="submit" class="bg-pink-600 text-white px-4 py-2 rounded" disabled>Place Order & Send Email</button>
+          <button id="submitBtn" type="submit" class="bg-pink-600 text-white px-4 py-2 rounded">Place Order</button>
           <a href="index.html" class="text-sm text-gray-600">Cancel</a>
         </div>
       </form>
 
-      <p class="mt-4 text-sm text-gray-500">Note: OTP sending is in demo mode (no SMS provider configured). See instructions below to enable real SMS delivery (Twilio/Firebase).</p>
-
-      <hr class="my-6" />
-
-      <h6 class="font-semibold">Integration notes</h6>
-      <ul class="text-sm text-gray-600 list-disc pl-5">
-        <li>To send SMS OTPs in production, integrate a service such as Twilio or Firebase Phone Auth (requires server or Firebase config).</li>
-        <li>To send email automatically from the browser use <code class="bg-gray-100 px-1 rounded">EmailJS</code>. You must replace the placeholders below with your EmailJS user/service/template IDs.</li>
-      </ul>
-
-      <div class="mt-4 p-4 border rounded bg-gray-50">
-        <h6 class="font-semibold mb-2">Email delivery (free)</h6>
-        <p class="text-sm text-gray-600 mb-2">This form will POST to FormSubmit.co (free simple email forwarding). No client setup required — emails will be sent to <strong>artcreation170@gmail.com</strong>. To change the destination email edit the form's `action` attribute.</p>
-        <p class="text-sm text-gray-600">After you place an order you'll receive an email containing the order details and a short workflow explaining next steps (confirmation, preparation, and expected timelines). Note: FormSubmit may ask you to confirm the destination email on first use.</p>
-      </div>
+      <p class="mt-4 text-sm text-gray-500">Important: For local Razorpay server use API_BASE=http://localhost:3000. See JS comments.</p>
     </div>
   </main>
 
@@ -135,451 +143,405 @@
     <p>&copy; 2025 Art and Creation. All rights reserved.</p>
   </footer>
 
-  <!-- Using FormSubmit.co for email delivery; no client SDK required -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Firebase (compat) - replace config below with your project's values -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="js/webp-swap.js" defer></script>
+  <!-- Razorpay Checkout -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    // Firebase configuration placeholder - REPLACE with your values
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-    const firebaseEnabled = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.apiKey !== 'YOUR_API_KEY';
-    let firebaseAuth = null;
-    let confirmationResult = null;
-    if (firebaseEnabled) {
-      try {
-        firebase.initializeApp(firebaseConfig);
-        firebaseAuth = firebase.auth();
-      } catch (e) {
-        console.warn('Firebase init failed', e);
-      }
-    }
-    // Copy of products data (6 products)
+    // CONFIG: server-backed preferred. Set RAZORPAY_KEY_ID blank so server returns public key.
+    const RAZORPAY_KEY_ID = ''; // leave blank to use server key
+    const USE_SERVER_ORDERS = true;
+    const API_BASE = 'http://localhost:3000';
+    const RETURN_URL = 'thankyou.html';
+
     const products = [
-      { id:1, name:'Handmade Vase', price:'499' },
-      { id:2, name:'Woven Basket', price:'399' },
-      { id:3, name:'Decorative Frame', price:'599' },
-      { id:4, name:'Handmade Wall Hanging', price:'699' },
-      { id:5, name:'Decorative Basket', price:'450' },
-      { id:6, name:'Photo Frame', price:'349' }
+      { id:1, name:'Mandala Photoframe', price:'499' },
+      { id:2, name:'Customized Gift Hamper', price:'399' },
+      { id:3, name:'String Art', price:'599' },
+      { id:4, name:'Butterfly Keyring', price:'699' },
+      { id:5, name:'Customized String Art', price:'450' },
+      { id:6, name:'Ganesha Lippan Art', price:'349' },
+      { id:7, name:'Dream Catcher Wall Hanging', price:'349' },
+      { id:8, name:'Thread Lamp', price:'349' }
     ];
 
-    // Client-side demo OTP implementation (improved local flow)
-    let currentOtp = null;
-    let otpVerified = false;
-    const OTP_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
-    const RESEND_COOLDOWN_MS = 60 * 1000; // 60 seconds
-    const MAX_OTP_ATTEMPTS = 3;
-    let resendTimerId = null;
+    let paymentCompleted = false;
 
-    function getQueryParam(name) {
-      return new URLSearchParams(window.location.search).get(name);
-    }
+    function getQueryParam(name) { return new URLSearchParams(window.location.search).get(name); }
 
     function populateCheckout() {
       const id = parseInt(getQueryParam('id') || '1', 10);
       const p = products.find(x=>x.id===id) || products[0];
       document.getElementById('prodName').value = p.name;
       document.getElementById('prodPrice').value = p.price;
+      document.getElementById('field_product').value = p.name;
+      document.getElementById('field_price').value = p.price;
     }
 
-    function sendOtpDemo() {
-      const phoneEl = document.getElementById('buyerPhone');
-      const phone = (phoneEl.value || '').trim();
-      const note = document.getElementById('otpNote');
-      if (!/^\d{10,15}$/.test(phone.replace(/\D/g, ''))) {
-        note.textContent = 'Please enter a valid phone number (10-15 digits).';
-        note.className = 'text-sm text-red-600 mt-2';
-        return;
+    async function findStaticQrForProduct(product) {
+      if (!product) return null;
+      const slug = product.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_\-]/g, '');
+      const candidates = [
+        `images/qrcodes/${slug}.png`,
+        `images/qrcodes/${slug}.jpg`,
+        `qrcodes/${slug}.png`,
+        `qrcodes/${slug}.jpg`,
+        `images/qrcodes/default.png`
+      ];
+      for (const p of candidates) {
+        try { const r = await fetch(p, { method: 'HEAD' }); if (r.ok) return p; } catch (e) {}
       }
-
-      // Generate random 6-digit OTP and save metadata to sessionStorage
-      currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
-      otpVerified = false;
-      const now = Date.now();
-      const otpData = {
-        otp: currentOtp,
-        phone: phone,
-        expiresAt: now + OTP_EXPIRY_MS,
-        attemptsLeft: MAX_OTP_ATTEMPTS,
-        lastSent: now
-      };
-      sessionStorage.setItem('otp_data', JSON.stringify(otpData));
-      document.getElementById('otpStatus').textContent = '';
-
-      // Demo: show OTP to user (in real app send via SMS)
-      note.innerHTML = 'Demo OTP (not sent via SMS): <strong>' + currentOtp + '</strong>. It expires in 5 minutes.';
-      note.className = 'text-sm text-gray-700 mt-2';
-      document.getElementById('submitBtn').disabled = true;
-      updateSubmitState();
-
-      // Start resend cooldown
-      startResendCooldown();
+      return null;
     }
 
-    // Firebase-based OTP send (if configured)
-    function sendOtpFirebase() {
-      if (!firebaseEnabled || !firebaseAuth) {
-        sendOtpDemo();
-        return;
-      }
-      const phoneEl = document.getElementById('buyerPhone');
-      const phoneRaw = (phoneEl.value || '').trim();
-      const digits = phoneRaw.replace(/\D/g, '');
-      if (!/^\d{10,15}$/.test(digits)) {
-        const note = document.getElementById('otpNote');
-        note.textContent = 'Please enter a valid phone number (10-15 digits).';
-        note.className = 'text-sm text-red-600 mt-2';
-        return;
-      }
-      // Normalize to E.164: if 10 digits assume +91
-      let phoneE164 = phoneRaw;
-      if (digits.length === 10) phoneE164 = '+91' + digits;
-      else if (phoneRaw.startsWith('+')) phoneE164 = '+' + digits;
-      else phoneE164 = '+' + digits;
-
-      // Create or reuse invisible reCAPTCHA
+    async function postVerifyToServer(payload) {
       try {
-        if (!window.recaptchaVerifier) {
-          window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size: 'invisible' });
-          window.recaptchaVerifier.render();
-        }
-        firebaseAuth.signInWithPhoneNumber(phoneE164, window.recaptchaVerifier)
-          .then(function (result) {
-            confirmationResult = result;
-            const note = document.getElementById('otpNote');
-            note.innerHTML = 'OTP sent via SMS. Please enter the code and click Verify.';
-            note.className = 'text-sm text-gray-700 mt-2';
-            document.getElementById('submitBtn').disabled = true;
-            updateSubmitState();
-          }).catch(function (err) {
-            console.error('Firebase SMS error', err);
-            const note = document.getElementById('otpNote');
-            note.textContent = 'Failed to send OTP via Firebase: ' + (err && err.message ? err.message : err);
-            note.className = 'text-sm text-red-600 mt-2';
-            // fallback to demo
-            // sendOtpDemo();
-          });
-      } catch (e) {
-        console.error(e);
-        sendOtpDemo();
-      }
+        const res = await fetch(`${API_BASE}/api/verify-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        return await res.json();
+      } catch (e) { console.warn('verify-payment error', e); return null; }
     }
 
-    function verifyOtp() {
-      const entered = (document.getElementById('otpInput').value || '').trim();
-      const status = document.getElementById('otpStatus');
-      const otpRaw = sessionStorage.getItem('otp_data');
-      if (!otpRaw) {
-        status.textContent = 'Please request an OTP first.';
-        status.className = 'text-sm text-red-600 mt-1';
-        return;
-      }
-      const otpData = JSON.parse(otpRaw);
-      const now = Date.now();
-      if (now > otpData.expiresAt) {
-        sessionStorage.removeItem('otp_data');
-        currentOtp = null;
-        status.textContent = 'OTP expired. Request a new one.';
-        status.className = 'text-sm text-red-600 mt-1';
-        document.getElementById('submitBtn').disabled = true;
-        return;
-      }
-      if (otpData.attemptsLeft <= 0) {
-        status.textContent = 'No attempts left. Request a new OTP.';
-        status.className = 'text-sm text-red-600 mt-1';
-        document.getElementById('submitBtn').disabled = true;
-        return;
-      }
-      if (entered === otpData.otp) {
-        otpVerified = true;
-        status.textContent = 'Phone verified ✓';
-        status.className = 'text-sm text-green-600 mt-1';
-        sessionStorage.removeItem('otp_data');
-        currentOtp = null;
-        clearResendCooldown();
-        updateSubmitState();
-      } else {
-        otpData.attemptsLeft = Math.max(0, otpData.attemptsLeft - 1);
-        sessionStorage.setItem('otp_data', JSON.stringify(otpData));
-        otpVerified = false;
-        status.textContent = 'Incorrect OTP. Attempts left: ' + otpData.attemptsLeft;
-        status.className = 'text-sm text-red-600 mt-1';
-        updateSubmitState();
-      }
-    }
-
-    // Verify OTP when using Firebase
-    function verifyOtpFirebase() {
-      const code = (document.getElementById('otpInput').value || '').trim();
-      const status = document.getElementById('otpStatus');
-      if (!confirmationResult) {
-        status.textContent = 'No OTP request found. Please request an OTP first.';
-        status.className = 'text-sm text-red-600 mt-1';
-        return;
-      }
-      confirmationResult.confirm(code).then(function (result) {
-        otpVerified = true;
-        status.textContent = 'Phone verified ✓';
-        status.className = 'text-sm text-green-600 mt-1';
-        confirmationResult = null;
-        clearResendCooldown();
-        updateSubmitState();
-      }).catch(function (err) {
-        console.error('Verification failed', err);
-        otpVerified = false;
-        status.textContent = 'Incorrect OTP or verification failed.';
-        status.className = 'text-sm text-red-600 mt-1';
-        updateSubmitState();
-      });
-    }
-
-    function startResendCooldown() {
-      const sendBtn = document.getElementById('sendOtpBtn');
-      const note = document.getElementById('otpNote');
-      if (!sendBtn) return;
-      sendBtn.disabled = true;
-      const raw = sessionStorage.getItem('otp_data');
-      if (!raw) return;
-      const otpData = JSON.parse(raw);
-      const expiresAt = otpData.lastSent + RESEND_COOLDOWN_MS;
-      function tick() {
-        const now = Date.now();
-        const remaining = Math.max(0, Math.ceil((expiresAt - now) / 1000));
-        if (remaining <= 0) {
-          sendBtn.disabled = false;
-          note.className = 'text-sm text-gray-700 mt-2';
-          note.textContent = 'You can request a new OTP.';
-          clearInterval(resendTimerId);
-          resendTimerId = null;
-        } else {
-          sendBtn.textContent = 'Resend OTP (' + remaining + 's)';
-        }
-      }
-      // immediate tick and interval
-      tick();
-      clearInterval(resendTimerId);
-      resendTimerId = setInterval(tick, 1000);
-    }
-
-    function clearResendCooldown() {
-      const sendBtn = document.getElementById('sendOtpBtn');
-      const note = document.getElementById('otpNote');
-      if (resendTimerId) {
-        clearInterval(resendTimerId);
-        resendTimerId = null;
-      }
-      if (sendBtn) {
-        sendBtn.disabled = false;
-        sendBtn.textContent = 'Send OTP';
-      }
-      if (note) {
-        note.className = 'text-sm text-gray-500 mt-2';
-        note.textContent = 'OTP will be sent to the phone number (demo mode).';
-      }
-    }
-
-    // Payment simulation state
-    let paymentMethod = 'COD';
-    let paymentCompleted = false;
-
-    function setPaymentMethod(method) {
-      paymentMethod = method;
-      const upiPanel = document.getElementById('upiPanel');
-      const subjectInput = document.getElementById('_subject');
-      if (upiPanel) upiPanel.classList.toggle('hidden', method !== 'UPI');
-      // reset UPI state when switching
-      if (method !== 'UPI') {
-        paymentCompleted = false;
-        const upiStatus = document.getElementById('upiStatus');
-        if (upiStatus) upiStatus.textContent = '';
-      }
-      const payMethodHidden = document.getElementById('_payment_method');
-      const payStatusHidden = document.getElementById('_payment_status');
-      if (payMethodHidden) payMethodHidden.value = method;
-      if (payStatusHidden) payStatusHidden.value = method === 'COD' ? 'Pending - COD' : 'Pending - UPI';
-      updateSubmitState();
-    }
-
-    function simulateUpiPay() {
-      const upiId = (document.getElementById('upiId').value || '').trim();
-      const upiStatus = document.getElementById('upiStatus');
-      if (!upiId || !/^[\w.\-]{2,}@\w{2,}$/.test(upiId)) {
-        if (upiStatus) {
-          upiStatus.textContent = 'Enter a valid UPI ID (example@bank).';
-          upiStatus.className = 'text-sm text-red-600';
-        }
-        paymentCompleted = false;
-        return;
-      }
-      // Simulate a successful payment: generate a fake txn id
-      const txn = 'TXN' + Date.now().toString().slice(-6);
+    async function onPaymentSuccess(response, orderMeta) {
       paymentCompleted = true;
-      const payMethodHidden = document.getElementById('_payment_method');
-      const payStatusHidden = document.getElementById('_payment_status');
-      const payTxnHidden = document.getElementById('_payment_txn');
-      if (payMethodHidden) payMethodHidden.value = 'UPI';
-      if (payStatusHidden) payStatusHidden.value = 'Success';
-      if (payTxnHidden) payTxnHidden.value = txn;
-      if (upiStatus) {
-        upiStatus.textContent = `Payment successful — txn ${txn}`;
-        upiStatus.className = 'text-sm text-green-600';
+      document.getElementById('_payment_method').value = 'RAZORPAY_UPI';
+      document.getElementById('_payment_status').value = 'Success';
+      document.getElementById('_payment_txn').value = response.razorpay_payment_id || response.razorpay_order_id || '';
+      // verify with local server if available
+      if (USE_SERVER_ORDERS) {
+        await postVerifyToServer({
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature
+        });
       }
-      updateSubmitState();
+      finalizeOrder(orderMeta);
     }
 
-    // Form readiness: only enable submit when OTP verified, required fields filled, and payment completed when required
-    function isFormReady() {
-      try {
-        if (!otpVerified) return false;
-        const name = (document.getElementById('buyerName').value || '').trim();
-        const phone = (document.getElementById('buyerPhone').value || '').trim();
-        const address = (document.getElementById('buyerAddress').value || '').trim();
-        if (!name || !address) return false;
-        if (!/^\d{10,15}$/.test(phone.replace(/\D/g, ''))) return false;
-        const method = (document.getElementById('_payment_method') && document.getElementById('_payment_method').value) || 'COD';
-        if (method === 'UPI' && !paymentCompleted) return false;
-        return true;
-      } catch (e) {
-        return false;
+    async function openRazorpayCheckout(orderMeta) {
+      const price = parseFloat(document.getElementById('prodPrice').value || '0') || 0;
+      const amountPaise = Math.round(price * 100);
+      const name = (document.getElementById('buyerName').value || '').trim() || 'Customer';
+      const email = (document.getElementById('buyerEmail').value || '').trim() || '';
+      const phone = (document.getElementById('buyerPhone').value || '').trim() || '';
+      const upiStatus = document.getElementById('upiStatus');
+      if (upiStatus) upiStatus.textContent = 'Processing payment...';
+
+      async function showStaticQrFallback() {
+        const product = orderMeta.product || document.getElementById('prodName').value || '';
+        const path = await findStaticQrForProduct(product);
+        if (path) {
+          const qrPanel = document.getElementById('qrPanel');
+          const upiPanel = document.getElementById('upiPanel');
+          if (upiPanel) upiPanel.classList.add('hidden');
+          if (qrPanel) qrPanel.classList.remove('hidden');
+          const qrImg = document.getElementById('qrImage');
+          const qrStatus = document.getElementById('qrStatus');
+          qrImg.src = path; qrImg.classList.remove('hidden');
+          qrStatus.innerHTML = 'Server unavailable — please scan the static QR to pay and click "I have paid (confirm)".';
+          document.getElementById('_payment_method').value = 'RAZORPAY_QR';
+          document.getElementById('_payment_status').value = 'QR Shown (fallback)';
+        } else {
+          if (upiStatus) upiStatus.textContent = 'Payment server unavailable and no static QR found.';
+        }
       }
+
+      if (USE_SERVER_ORDERS) {
+        try {
+          const res = await fetch(`${API_BASE}/api/create-order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amountPaise: amountPaise, currency: 'INR', receipt: 'rcpt_' + Date.now() })
+          });
+          if (!res.ok) { if (RAZORPAY_KEY_ID) { /* fallback client key */ } else { await showStaticQrFallback(); return; } }
+          const json = await res.json();
+          if (!json || !json.id || !json.key) { await showStaticQrFallback(); return; }
+          const options = {
+            key: json.key,
+            amount: amountPaise,
+            currency: 'INR',
+            name: 'Art and Creation',
+            description: orderMeta.product || 'Purchase',
+            order_id: json.id,
+            prefill: { name, email, contact: phone },
+            handler: function(response) { onPaymentSuccess(response, orderMeta); }
+          };
+          new Razorpay(options).open();
+          return;
+        } catch (err) {
+          console.error('Network error creating order', err);
+          if (RAZORPAY_KEY_ID) { /* fallback client key handled below */ }
+          else { await showStaticQrFallback(); return; }
+        }
+      }
+
+      // Client-only fallback (if public key configured)
+      if (RAZORPAY_KEY_ID) {
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: amountPaise,
+          currency: 'INR',
+          name: 'Art and Creation',
+          description: orderMeta.product || 'Purchase',
+          prefill: { name, email, contact: phone },
+          handler: function(response) { onPaymentSuccess(response, orderMeta); },
+          modal: { ondismiss: function(){ if (upiStatus) upiStatus.textContent = 'Checkout closed.'; } }
+        };
+        try { new Razorpay(options).open(); return; }
+        catch (err) { console.error('Razorpay open error', err); if (upiStatus) upiStatus.textContent = 'Unable to open checkout.'; }
+      }
+
+      await showStaticQrFallback();
+    }
+
+    // For QR: load static image if available
+    async function showQrForProduct() {
+      const product = document.getElementById('prodName').value || '';
+      const qrStatus = document.getElementById('qrStatus');
+      const qrImg = document.getElementById('qrImage');
+      qrStatus.textContent = 'Searching for static QR...';
+      const path = await findStaticQrForProduct(product);
+      if (path) {
+        qrImg.src = path; qrImg.classList.remove('hidden');
+        qrStatus.textContent = 'Scan the QR with your UPI app to pay.';
+        document.getElementById('_payment_status').value = 'QR Shown';
+      } else {
+        qrStatus.textContent = 'No static QR found. Provide a static QR image under images/qrcodes/.';
+      }
+    }
+
+    // Finalize order locally and send a single simple email/form submission with all info + attachment
+    function finalizeOrder(orderMeta){
+      const receipt = 'rcpt_'+Date.now();
+      const order = {
+        receipt,
+        product: orderMeta.product,
+        price: orderMeta.price,
+        name: orderMeta.name,
+        email: orderMeta.email,
+        phone: orderMeta.phone,
+        address: orderMeta.address,
+        payment_method: document.getElementById('_payment_method').value,
+        payment_status: document.getElementById('_payment_status').value,
+        payment_txn: document.getElementById('_payment_txn').value,
+        created_at: new Date().toISOString()
+      };
+      localStorage.setItem('lastOrder', JSON.stringify(order));
+
+      // Build a native form POST to FormSubmit so the email contains all fields and file attachment (comprehensive format)
+      (function sendOrderEmailNative(){
+        try {
+          const endpoint = 'https://formsubmit.co/artcreation170@gmail.com';
+          const f = document.createElement('form');
+          f.method = 'POST';
+          f.action = endpoint;
+          f.enctype = 'multipart/form-data';
+          f.style.display = 'none';
+          f.target = 'gf_iframe';
+
+          const addHidden = (name, value) => {
+            const i = document.createElement('input'); i.type = 'hidden'; i.name = name; i.value = value || ''; f.appendChild(i);
+          };
+
+          addHidden('_subject', `New Order: ${order.product} — ${order.name}`);
+          const message = [
+            `Receipt: ${order.receipt}`,
+            `Product: ${order.product} — INR ${order.price}`,
+            `Name: ${order.name}`,
+            `Email: ${order.email || 'N/A'}`,
+            `Phone: ${order.phone}`,
+            `Address: ${order.address}`,
+            `Payment method: ${order.payment_method}`,
+            `Payment status: ${order.payment_status}`,
+            `Transaction id: ${order.payment_txn || 'N/A'}`,
+            `Created at: ${order.created_at}`,
+            '',
+            'Please process this order and confirm via email.'
+          ].join('\n');
+          addHidden('message', message);
+
+          addHidden('receipt', order.receipt);
+          addHidden('product', order.product);
+          addHidden('price', order.price);
+          addHidden('name', order.name);
+          addHidden('email', order.email || '');
+          addHidden('phone', order.phone);
+          addHidden('address', order.address);
+          addHidden('payment_method', order.payment_method);
+          addHidden('payment_status', order.payment_status);
+          addHidden('transaction_id', order.payment_txn || '');
+          addHidden('created_at', order.created_at);
+
+          addHidden('_next', window.location.origin + '/' + RETURN_URL);
+          addHidden('_captcha', 'false');
+
+          // Move real file input into the form so browser includes it in multipart POST
+          const fileInput = document.getElementById('paymentScreenshot');
+          let fileParent = null, fileNext = null;
+          if (fileInput) {
+            fileParent = fileInput.parentNode;
+            fileNext = fileInput.nextSibling;
+            if (fileInput.files && fileInput.files.length) {
+              f.appendChild(fileInput);
+            }
+          }
+
+          if (!document.querySelector('iframe[name="gf_iframe"]')) {
+            const ifr = document.createElement('iframe');
+            ifr.name = 'gf_iframe';
+            ifr.style.display = 'none';
+            document.body.appendChild(ifr);
+          }
+
+          document.body.appendChild(f);
+          f.submit();
+
+          setTimeout(() => {
+            try {
+              if (fileParent && fileInput) {
+                if (fileNext) fileParent.insertBefore(fileInput, fileNext);
+                else fileParent.appendChild(fileInput);
+              }
+              document.body.removeChild(f);
+            } catch (e) {}
+          }, 1500);
+        } catch (e) {
+          console.error('Order email submit failed', e);
+        }
+      })();
+
+      window.location.href = RETURN_URL + '?receipt=' + encodeURIComponent(receipt);
+    }
+
+    function isFormReady() {
+      const name = (document.getElementById('buyerName').value || '').trim();
+      const phone = (document.getElementById('buyerPhone').value || '').trim();
+      const address = (document.getElementById('buyerAddress').value || '').trim();
+      if (!name || !address) return false;
+      if (!/^\d{10,15}$/.test(phone.replace(/\D/g, ''))) return false;
+      return true;
     }
 
     function updateSubmitState() {
       const submitBtn = document.getElementById('submitBtn');
-      if (!submitBtn) return;
-      const ready = isFormReady();
-      submitBtn.disabled = !ready;
+      if (submitBtn) submitBtn.disabled = !isFormReady();
     }
-
 
     document.addEventListener('DOMContentLoaded', () => {
       populateCheckout();
 
-      // If the page is opened via file:// show a helpful notice and provide a mailto fallback
-      if (location.protocol === 'file:') {
-        const notice = document.getElementById('fileProtocolNotice');
-        if (notice) notice.classList.remove('hidden');
-
-        // Fallback: open user's mail client with order details (for local testing only)
-        document.getElementById('openMailFallback').addEventListener('click', function(){
-          const product = document.getElementById('prodName').value || '';
-          const price = document.getElementById('prodPrice').value || '';
-          const name = (document.getElementById('buyerName').value || '').trim();
-          const phone = (document.getElementById('buyerPhone').value || '').trim();
-          const address = (document.getElementById('buyerAddress').value || '').trim();
-          const subject = `New Order: ${product} — ${name || 'Local Test'}`;
-          const body = `Order Details:\nProduct: ${product}\nPrice: INR ${price}\nName: ${name}\nPhone: ${phone}\nAddress: ${address}`;
-          // Open mail client
-          window.location.href = 'mailto:artcreation170@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-        });
-
-        document.getElementById('howToServer').addEventListener('click', function(){
-          alert('Run a local server and open http://localhost:8000 in your browser.\nFor example, run:\n\npython -m http.server 8000-\n\nOr use VS Code Live Server extension.');
-        });
-
-        // Prevent default FormSubmit submission when running as file:// and instead use mailto fallback
-        const form = document.getElementById('checkoutForm');
-        if (form) {
-          form.addEventListener('submit', function(e){
-            // Allow the mailto fallback via the button; if user directly clicks submit show guidance
-            e.preventDefault();
-            alert('This page is opened as a file. FormSubmit will not work. Use the "Open Mail Fallback" button or serve the page via a local web server (see instructions).');
-            return false;
-          });
-        }
-      }
-
-      // OTP handlers (use Firebase if configured)
-      document.getElementById('sendOtpBtn').addEventListener('click', function(){
-        if (firebaseEnabled) sendOtpFirebase(); else sendOtpDemo();
-      });
-      document.getElementById('verifyOtpBtn').addEventListener('click', function(){
-        if (firebaseEnabled) verifyOtpFirebase(); else verifyOtp();
-      });
-
-      // Input listeners to update submit state
-      const nameEl = document.getElementById('buyerName');
-      const phoneEl = document.getElementById('buyerPhone');
-      const addrEl = document.getElementById('buyerAddress');
-      const upiIdEl = document.getElementById('upiId');
-      if (nameEl) nameEl.addEventListener('input', updateSubmitState);
-      if (phoneEl) phoneEl.addEventListener('input', updateSubmitState);
-      if (addrEl) addrEl.addEventListener('input', updateSubmitState);
-      if (upiIdEl) upiIdEl.addEventListener('input', updateSubmitState);
-
-      // Payment option handlers
       const upiRadio = document.getElementById('payUpiRadio');
-      const codRadio = document.getElementById('payCodRadio');
+      const qrRadio = document.getElementById('payQrRadio');
       const upiPayBtn = document.getElementById('upiPayBtn');
-      if (upiRadio) upiRadio.addEventListener('change', () => setPaymentMethod('UPI'));
-      if (codRadio) codRadio.addEventListener('change', () => setPaymentMethod('COD'));
-      if (upiPayBtn) upiPayBtn.addEventListener('click', simulateUpiPay);
+      const genQrBtn = document.getElementById('generateQrBtn');
+      const confirmBtn = document.getElementById('confirmQrPaidBtn');
 
-      // initialize payment UI according to default selection
-      if (document.getElementById('payUpiRadio') && document.getElementById('payUpiRadio').checked) {
-        setPaymentMethod('UPI');
-      } else {
-        setPaymentMethod('COD');
+      function setPaymentMethodUI(method) {
+        const upiPanel = document.getElementById('upiPanel');
+        const qrPanel = document.getElementById('qrPanel');
+        if (upiPanel) upiPanel.classList.toggle('hidden', method !== 'RAZORPAY_UPI');
+        if (qrPanel) qrPanel.classList.toggle('hidden', method !== 'RAZORPAY_QR');
+        document.getElementById('_payment_method').value = method;
+        document.getElementById('_payment_status').value = 'Pending';
+        document.getElementById('_payment_txn').value = '';
       }
 
-      document.getElementById('checkoutForm').addEventListener('submit', function(e){
-        e.preventDefault();
-        if (!otpVerified) {
-          alert('Please verify your phone number with OTP before submitting.');
-          return;
-        }
-        const data = {
+      if (upiRadio) upiRadio.addEventListener('change', () => setPaymentMethodUI('RAZORPAY_UPI'));
+      if (qrRadio) qrRadio.addEventListener('change', () => setPaymentMethodUI('RAZORPAY_QR'));
+      if (upiPayBtn) upiPayBtn.addEventListener('click', () => {
+        if (!isFormReady()) { alert('Please fill required fields first.'); return; }
+        const meta = {
           product: document.getElementById('prodName').value,
           price: document.getElementById('prodPrice').value,
           name: document.getElementById('buyerName').value.trim(),
-          email: (document.getElementById('buyerEmail') && document.getElementById('buyerEmail').value.trim()) || '',
+          email: document.getElementById('buyerEmail').value.trim(),
           phone: document.getElementById('buyerPhone').value.trim(),
           address: document.getElementById('buyerAddress').value.trim()
         };
-
-        // Basic validation
-        if (!data.name || !/^\d{10,15}$/.test(data.phone.replace(/\D/g, '')) || !data.address) {
-          alert('Please fill in all required fields correctly.');
-          return;
-        }
-
-        // Build an informative subject and message payload for the email
-        const subjectInput = document.getElementById('_subject');
-        const messageInput = document.getElementById('_message');
-        const subjectText = `New Order: ${data.product} — ${data.name}`;
-        const workflow = `Workflow:\n1) We received your order and will confirm availability within 24 hours.\n2) Once confirmed we prepare the item (1-3 business days).\n3) You'll receive shipment details and tracking when dispatched.\n4) Contact artcreation170@gmail.com for support.`;
-        const messageText = `Order Details:\nProduct: ${data.product}\nPrice: INR ${data.price}\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nAddress: ${data.address}\n\n${workflow}`;
-        if (subjectInput) subjectInput.value = subjectText;
-        if (messageInput) messageInput.value = messageText;
-
-        // Ensure payment state is valid
-        const hiddenMethod = (document.getElementById('_payment_method') && document.getElementById('_payment_method').value) || 'COD';
-        const hiddenStatusEl = document.getElementById('_payment_status');
-        const hiddenStatus = hiddenStatusEl ? hiddenStatusEl.value : (hiddenMethod === 'COD' ? 'Pending - COD' : 'Pending');
-        if (hiddenMethod === 'UPI' && !paymentCompleted) {
-          alert('Please complete the UPI payment (click Simulate UPI Pay) before placing the order.');
-          return;
-        }
-
-        // Append payment info to message and hidden fields
-        const payTxn = (document.getElementById('_payment_txn') && document.getElementById('_payment_txn').value) || '';
-        const paymentSummary = `Payment Method: ${hiddenMethod}\nPayment Status: ${hiddenStatus}${payTxn ? '\nTxn: ' + payTxn : ''}`;
-        const finalMessage = messageText + '\n\n' + paymentSummary;
-        if (messageInput) messageInput.value = finalMessage;
-
-        // Notify the user and submit the form to FormSubmit.co which will forward the email.
-        alert('Order submitted. You will receive an email with order details and next steps shortly.');
-        document.getElementById('checkoutForm').submit();
+        openRazorpayCheckout(meta);
       });
+      if (genQrBtn) genQrBtn.addEventListener('click', showQrForProduct);
+      if (confirmBtn) confirmBtn.addEventListener('click', ()=>{
+        if (!isFormReady()){ alert('Please fill required fields first.'); return; }
+        const txn = (document.getElementById('qrTxnId')||{}).value || '';
+        const fileInput = document.getElementById('paymentScreenshot');
+        const hasFile = fileInput && fileInput.files && fileInput.files[0];
+        if (!txn && !hasFile) {
+          alert('Please upload payment receipt screenshot or enter transaction id before confirming payment.');
+          return;
+        }
+        document.getElementById('_payment_method').value = 'RAZORPAY_QR';
+        document.getElementById('_payment_status').value = 'Paid (manual-confirm)';
+        if (txn) document.getElementById('_payment_txn').value = txn;
+        alert('Payment info recorded. Now click "Place Order" to complete the order.');
+      });
+
+      const nameEl = document.getElementById('buyerName');
+      const phoneEl = document.getElementById('buyerPhone');
+      const addrEl = document.getElementById('buyerAddress');
+      if (nameEl) nameEl.addEventListener('input', updateSubmitState);
+      if (phoneEl) phoneEl.addEventListener('input', updateSubmitState);
+      if (addrEl) addrEl.addEventListener('input', updateSubmitState);
+
+      // initialize UI
+      setPaymentMethodUI(document.getElementById('payUpiRadio').checked ? 'RAZORPAY_UPI' : 'RAZORPAY_QR');
+
+      // Submit handler: if UPI selected and not yet paid, open checkout; otherwise finalize
+      document.getElementById('checkoutForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        if (!isFormReady()){ alert('Please fill required fields correctly.'); return; }
+        const method = document.getElementById('_payment_method').value || 'RAZORPAY_UPI';
+        const meta = {
+          product: document.getElementById('prodName').value,
+          price: document.getElementById('prodPrice').value,
+          name: document.getElementById('buyerName').value.trim(),
+          email: document.getElementById('buyerEmail').value.trim(),
+          phone: document.getElementById('buyerPhone').value.trim(),
+          address: document.getElementById('buyerAddress').value.trim()
+        };
+        if (method === 'RAZORPAY_UPI') {
+          openRazorpayCheckout(meta);
+          return;
+        }
+        // QR flow: require payment evidence before finalizing
+        if (method === 'RAZORPAY_QR') {
+          const status = (document.getElementById('_payment_status')||{}).value || '';
+          if (status.indexOf('Paid') === -1) {
+            alert('Please confirm QR payment by clicking "I have paid (confirm)" after scanning QR.');
+            return;
+          }
+          const txn = (document.getElementById('qrTxnId')||{}).value || '';
+          const fileInput = document.getElementById('paymentScreenshot');
+          const hasFile = fileInput && fileInput.files && fileInput.files[0];
+          if (!txn && !hasFile) {
+            alert('Please upload payment screenshot or enter transaction id before placing the order.');
+            return;
+          }
+          if (txn) document.getElementById('_payment_txn').value = txn;
+        }
+        finalizeOrder(meta);
+      });
+
+      // file-protocol notice and fallback handlers
+      function checkFileProtocol(){
+        if (location.protocol === 'file:') {
+          const notice = document.getElementById('fileProtocolNotice');
+          if (notice) notice.classList.remove('hidden');
+        }
+      }
+      const openMail = document.getElementById('openMailFallback');
+      if (openMail) openMail.addEventListener('click', function(){
+        const to = 'artcreation170@gmail.com';
+        const subject = encodeURIComponent('Order from website');
+        const body = encodeURIComponent('Please attach screenshot and include order details.\n\n');
+        window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+      });
+      const howBtn = document.getElementById('howToServer');
+      if (howBtn) howBtn.addEventListener('click', function(){ alert('Run a local server for testing: from Website folder run: npx http-server -p 8080 or use VSCode Live Server.'); });
+
+      checkFileProtocol();
+      updateSubmitState();
     });
   </script>
 </body>

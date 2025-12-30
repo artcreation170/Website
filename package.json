@@ -1,0 +1,20 @@
+{
+  "name": "art-creation-website",
+  "version": "1.0.0",
+  "description": "Static site with example OTP/QR server",
+  "main": "twilio_server_example.js",
+  "scripts": {
+    "start": "node twilio_server_example.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.8.0",
+    "helmet": "^7.0.0",
+    "nodemailer": "^6.9.3",
+    "qrcode": "^1.5.1",
+    "twilio": "^4.6.0"
+  }
+}
