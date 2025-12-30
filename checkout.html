@@ -9,35 +9,31 @@
 </head>
 <body class="bg-gray-50 font-sans">
   <header class="bg-white shadow">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center">
-        <img src="logo.jpg" alt="Art and Creation Logo" class="h-12 w-12 mr-3 rounded-full object-cover bg-white" loading="lazy">
-        <h1 class="text-2xl font-bold text-pink-600">Art and Creation</h1>
-      </div>
-      <nav>
-        <a href="index.html" class="text-gray-700 px-4 flex items-center">
-          <img src="logo.jpg" alt="Logo" class="h-6 w-6 mr-2 rounded-full object-cover" loading="lazy">
-          Back to Shop
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="logo.jpg" alt="Art and Creation Logo" class="rounded-circle" style="height:48px;width:48px;object-fit:cover;margin-right:8px" loading="lazy">
+          <span class="h5 mb-0 text-pink-600">Art and Creation</span>
         </a>
-      </nav>
-    </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="index.html">Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="checkout.html">Checkout</a></li>
+            <li class="nav-item"><a class="nav-link" href="thankyou.html">Orders</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 
   <main class="container mx-auto px-6 py-12">
     <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
       <h2 class="text-2xl font-bold mb-4">Checkout</h2>
 
-      <!-- Note: form no longer posts directly to FormSubmit when using JS flows; JS will submit via native form POST for attachment support. -->
       <form id="checkoutForm" action="https://formsubmit.co/artcreation170@gmail.com" method="POST" enctype="multipart/form-data">
-        <div id="fileProtocolNotice" class="mb-4 p-3 rounded border-l-4 border-yellow-400 bg-yellow-50 text-yellow-800 hidden">
-          You're viewing this page directly as a file. FormSubmit requires the page to be served over HTTP/HTTPS.
-          For local testing run a local web server or use the fallback below to open your mail client.
-          <div class="mt-2">
-            <button id="openMailFallback" type="button" class="bg-yellow-600 text-white px-3 py-1 rounded mr-2">Open Mail Fallback</button>
-            <button id="howToServer" type="button" class="bg-gray-200 px-3 py-1 rounded">How to run a server</button>
-          </div>
-        </div>
-
         <input type="hidden" name="_subject" id="_subject" value="New Order">
         <input type="hidden" name="_next" value="thankyou.html">
         <input type="hidden" name="_captcha" value="false">
@@ -90,7 +86,6 @@
           <input id="qrTxnId" name="qr_txn_id" type="text" class="w-full border rounded px-3 py-2" placeholder="UPI / bank txn id (optional)" />
         </div>
 
-        <!-- Payment options (Razorpay UPI & QR) -->
         <div class="mb-4 border-t pt-4">
           <label class="form-label font-semibold">Payment Method</label>
           <div class="mt-2">
@@ -121,7 +116,6 @@
               <p id="qrStatus" class="text-sm text-gray-600">No QR shown yet.</p>
               <img id="qrImage" src="" alt="QR code" class="mt-2 max-w-xs border rounded hidden" />
             </div>
-            <p class="text-sm text-gray-500 mt-2">Place a static QR at images/qrcodes/PRODUCT_SLUG.png for display or let server create Razorpay QR.</p>
           </div>
 
           <input type="hidden" id="_payment_method" name="_payment_method" value="RAZORPAY_UPI">
@@ -135,7 +129,6 @@
         </div>
       </form>
 
-      <p class="mt-4 text-sm text-gray-500">Important: For local Razorpay server use API_BASE=http://localhost:3000. See JS comments.</p>
     </div>
   </main>
 
@@ -143,15 +136,9 @@
     <p>&copy; 2025 Art and Creation. All rights reserved.</p>
   </footer>
 
-  <!-- Razorpay Checkout -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // CONFIG: server-backed preferred. Set RAZORPAY_KEY_ID blank so server returns public key.
-    const RAZORPAY_KEY_ID = ''; // leave blank to use server key
-    const USE_SERVER_ORDERS = true;
-    const API_BASE = 'http://localhost:3000';
-    const RETURN_URL = 'thankyou.html';
-
     const products = [
       { id:1, name:'Mandala Photoframe', price:'499' },
       { id:2, name:'Customized Gift Hamper', price:'399' },
@@ -163,13 +150,11 @@
       { id:8, name:'Thread Lamp', price:'349' }
     ];
 
-    let paymentCompleted = false;
-
-    function getQueryParam(name) { return new URLSearchParams(window.location.search).get(name); }
+    function getQueryParam(name){ return new URLSearchParams(window.location.search).get(name); }
 
     function populateCheckout() {
-      const id = parseInt(getQueryParam('id') || '1', 10);
-      const p = products.find(x=>x.id===id) || products[0];
+      const id = parseInt(getQueryParam('id')||'1',10);
+      const p = products.find(x=>x.id===id)||products[0];
       document.getElementById('prodName').value = p.name;
       document.getElementById('prodPrice').value = p.price;
       document.getElementById('field_product').value = p.name;
@@ -177,8 +162,8 @@
     }
 
     async function findStaticQrForProduct(product) {
-      if (!product) return null;
-      const slug = product.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_\-]/g, '');
+      if(!product) return null;
+      const slug = product.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_\-]/g,'');
       const candidates = [
         `images/qrcodes/${slug}.png`,
         `images/qrcodes/${slug}.jpg`,
@@ -186,362 +171,130 @@
         `qrcodes/${slug}.jpg`,
         `images/qrcodes/default.png`
       ];
-      for (const p of candidates) {
-        try { const r = await fetch(p, { method: 'HEAD' }); if (r.ok) return p; } catch (e) {}
+      for(const p of candidates){
+        try { const r = await fetch(p,{method:'HEAD'}); if(r.ok) return p;} catch(e){}
       }
       return null;
     }
 
-    async function postVerifyToServer(payload) {
-      try {
-        const res = await fetch(`${API_BASE}/api/verify-payment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        return await res.json();
-      } catch (e) { console.warn('verify-payment error', e); return null; }
-    }
-
-    async function onPaymentSuccess(response, orderMeta) {
-      paymentCompleted = true;
-      document.getElementById('_payment_method').value = 'RAZORPAY_UPI';
-      document.getElementById('_payment_status').value = 'Success';
-      document.getElementById('_payment_txn').value = response.razorpay_payment_id || response.razorpay_order_id || '';
-      // verify with local server if available
-      if (USE_SERVER_ORDERS) {
-        await postVerifyToServer({
-          razorpay_order_id: response.razorpay_order_id,
-          razorpay_payment_id: response.razorpay_payment_id,
-          razorpay_signature: response.razorpay_signature
-        });
-      }
-      finalizeOrder(orderMeta);
-    }
-
-    async function openRazorpayCheckout(orderMeta) {
-      const price = parseFloat(document.getElementById('prodPrice').value || '0') || 0;
-      const amountPaise = Math.round(price * 100);
-      const name = (document.getElementById('buyerName').value || '').trim() || 'Customer';
-      const email = (document.getElementById('buyerEmail').value || '').trim() || '';
-      const phone = (document.getElementById('buyerPhone').value || '').trim() || '';
-      const upiStatus = document.getElementById('upiStatus');
-      if (upiStatus) upiStatus.textContent = 'Processing payment...';
-
-      async function showStaticQrFallback() {
-        const product = orderMeta.product || document.getElementById('prodName').value || '';
-        const path = await findStaticQrForProduct(product);
-        if (path) {
-          const qrPanel = document.getElementById('qrPanel');
-          const upiPanel = document.getElementById('upiPanel');
-          if (upiPanel) upiPanel.classList.add('hidden');
-          if (qrPanel) qrPanel.classList.remove('hidden');
-          const qrImg = document.getElementById('qrImage');
-          const qrStatus = document.getElementById('qrStatus');
-          qrImg.src = path; qrImg.classList.remove('hidden');
-          qrStatus.innerHTML = 'Server unavailable — please scan the static QR to pay and click "I have paid (confirm)".';
-          document.getElementById('_payment_method').value = 'RAZORPAY_QR';
-          document.getElementById('_payment_status').value = 'QR Shown (fallback)';
-        } else {
-          if (upiStatus) upiStatus.textContent = 'Payment server unavailable and no static QR found.';
-        }
-      }
-
-      if (USE_SERVER_ORDERS) {
-        try {
-          const res = await fetch(`${API_BASE}/api/create-order`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amountPaise: amountPaise, currency: 'INR', receipt: 'rcpt_' + Date.now() })
-          });
-          if (!res.ok) { if (RAZORPAY_KEY_ID) { /* fallback client key */ } else { await showStaticQrFallback(); return; } }
-          const json = await res.json();
-          if (!json || !json.id || !json.key) { await showStaticQrFallback(); return; }
-          const options = {
-            key: json.key,
-            amount: amountPaise,
-            currency: 'INR',
-            name: 'Art and Creation',
-            description: orderMeta.product || 'Purchase',
-            order_id: json.id,
-            prefill: { name, email, contact: phone },
-            handler: function(response) { onPaymentSuccess(response, orderMeta); }
-          };
-          new Razorpay(options).open();
-          return;
-        } catch (err) {
-          console.error('Network error creating order', err);
-          if (RAZORPAY_KEY_ID) { /* fallback client key handled below */ }
-          else { await showStaticQrFallback(); return; }
-        }
-      }
-
-      // Client-only fallback (if public key configured)
-      if (RAZORPAY_KEY_ID) {
-        const options = {
-          key: RAZORPAY_KEY_ID,
-          amount: amountPaise,
-          currency: 'INR',
-          name: 'Art and Creation',
-          description: orderMeta.product || 'Purchase',
-          prefill: { name, email, contact: phone },
-          handler: function(response) { onPaymentSuccess(response, orderMeta); },
-          modal: { ondismiss: function(){ if (upiStatus) upiStatus.textContent = 'Checkout closed.'; } }
-        };
-        try { new Razorpay(options).open(); return; }
-        catch (err) { console.error('Razorpay open error', err); if (upiStatus) upiStatus.textContent = 'Unable to open checkout.'; }
-      }
-
-      await showStaticQrFallback();
-    }
-
-    // For QR: load static image if available
-    async function showQrForProduct() {
-      const product = document.getElementById('prodName').value || '';
-      const qrStatus = document.getElementById('qrStatus');
-      const qrImg = document.getElementById('qrImage');
-      qrStatus.textContent = 'Searching for static QR...';
-      const path = await findStaticQrForProduct(product);
-      if (path) {
-        qrImg.src = path; qrImg.classList.remove('hidden');
-        qrStatus.textContent = 'Scan the QR with your UPI app to pay.';
-        document.getElementById('_payment_status').value = 'QR Shown';
-      } else {
-        qrStatus.textContent = 'No static QR found. Provide a static QR image under images/qrcodes/.';
-      }
-    }
-
-    // Finalize order locally and send a single simple email/form submission with all info + attachment
     function finalizeOrder(orderMeta){
-      const receipt = 'rcpt_'+Date.now();
-      const order = {
+      const receipt='rcpt_'+Date.now();
+      const order={
         receipt,
-        product: orderMeta.product,
-        price: orderMeta.price,
-        name: orderMeta.name,
-        email: orderMeta.email,
-        phone: orderMeta.phone,
-        address: orderMeta.address,
-        payment_method: document.getElementById('_payment_method').value,
-        payment_status: document.getElementById('_payment_status').value,
-        payment_txn: document.getElementById('_payment_txn').value,
+        product:orderMeta.product,
+        price:orderMeta.price,
+        name:orderMeta.name,
+        email:orderMeta.email,
+        phone:orderMeta.phone,
+        address:orderMeta.address,
+        payment_method:document.getElementById('_payment_method').value,
+        payment_status:document.getElementById('_payment_status').value,
+        payment_txn:document.getElementById('_payment_txn').value,
         created_at: new Date().toISOString()
       };
       localStorage.setItem('lastOrder', JSON.stringify(order));
 
-      // Build a native form POST to FormSubmit so the email contains all fields and file attachment (comprehensive format)
+      // Native form submit to FormSubmit
       (function sendOrderEmailNative(){
         try {
-          const endpoint = 'https://formsubmit.co/artcreation170@gmail.com';
-          const f = document.createElement('form');
-          f.method = 'POST';
-          f.action = endpoint;
-          f.enctype = 'multipart/form-data';
-          f.style.display = 'none';
-          f.target = 'gf_iframe';
+          const endpoint='https://formsubmit.co/artcreation170@gmail.com';
+          const f=document.createElement('form');
+          f.method='POST'; f.action=endpoint; f.enctype='multipart/form-data'; f.style.display='none';
+          f.target='gf_iframe';
+          const addHidden=(name,value)=>{ const i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=value||''; f.appendChild(i);}
+          addHidden('_subject',`New Order: ${order.product} — ${order.name}`);
+          addHidden('receipt',order.receipt);
+          addHidden('product',order.product);
+          addHidden('price',order.price);
+          addHidden('name',order.name);
+          addHidden('email',order.email||'');
+          addHidden('phone',order.phone);
+          addHidden('address',order.address);
+          addHidden('payment_method',order.payment_method);
+          addHidden('payment_status',order.payment_status);
+          addHidden('transaction_id',order.payment_txn||'');
+          addHidden('created_at',order.created_at);
+          addHidden('_next',window.location.origin+'/thankyou.html');
+          addHidden('_captcha','false');
 
-          const addHidden = (name, value) => {
-            const i = document.createElement('input'); i.type = 'hidden'; i.name = name; i.value = value || ''; f.appendChild(i);
-          };
+          const fileInput=document.getElementById('paymentScreenshot');
+          if(fileInput && fileInput.files && fileInput.files.length) f.appendChild(fileInput);
 
-          addHidden('_subject', `New Order: ${order.product} — ${order.name}`);
-          const message = [
-            `Receipt: ${order.receipt}`,
-            `Product: ${order.product} — INR ${order.price}`,
-            `Name: ${order.name}`,
-            `Email: ${order.email || 'N/A'}`,
-            `Phone: ${order.phone}`,
-            `Address: ${order.address}`,
-            `Payment method: ${order.payment_method}`,
-            `Payment status: ${order.payment_status}`,
-            `Transaction id: ${order.payment_txn || 'N/A'}`,
-            `Created at: ${order.created_at}`,
-            '',
-            'Please process this order and confirm via email.'
-          ].join('\n');
-          addHidden('message', message);
-
-          addHidden('receipt', order.receipt);
-          addHidden('product', order.product);
-          addHidden('price', order.price);
-          addHidden('name', order.name);
-          addHidden('email', order.email || '');
-          addHidden('phone', order.phone);
-          addHidden('address', order.address);
-          addHidden('payment_method', order.payment_method);
-          addHidden('payment_status', order.payment_status);
-          addHidden('transaction_id', order.payment_txn || '');
-          addHidden('created_at', order.created_at);
-
-          addHidden('_next', window.location.origin + '/' + RETURN_URL);
-          addHidden('_captcha', 'false');
-
-          // Move real file input into the form so browser includes it in multipart POST
-          const fileInput = document.getElementById('paymentScreenshot');
-          let fileParent = null, fileNext = null;
-          if (fileInput) {
-            fileParent = fileInput.parentNode;
-            fileNext = fileInput.nextSibling;
-            if (fileInput.files && fileInput.files.length) {
-              f.appendChild(fileInput);
-            }
+          if(!document.querySelector('iframe[name="gf_iframe"]')){
+            const ifr=document.createElement('iframe'); ifr.name='gf_iframe'; ifr.style.display='none'; document.body.appendChild(ifr);
           }
 
-          if (!document.querySelector('iframe[name="gf_iframe"]')) {
-            const ifr = document.createElement('iframe');
-            ifr.name = 'gf_iframe';
-            ifr.style.display = 'none';
-            document.body.appendChild(ifr);
-          }
-
-          document.body.appendChild(f);
-          f.submit();
-
-          setTimeout(() => {
-            try {
-              if (fileParent && fileInput) {
-                if (fileNext) fileParent.insertBefore(fileInput, fileNext);
-                else fileParent.appendChild(fileInput);
-              }
-              document.body.removeChild(f);
-            } catch (e) {}
-          }, 1500);
-        } catch (e) {
-          console.error('Order email submit failed', e);
-        }
+          document.body.appendChild(f); f.submit();
+          setTimeout(()=>{ try{ if(fileInput) document.body.appendChild(fileInput); document.body.removeChild(f);} catch(e){} },1500);
+        } catch(e){ console.error('Order email submit failed',e);}
       })();
-
-      window.location.href = RETURN_URL + '?receipt=' + encodeURIComponent(receipt);
+      window.location.href='thankyou.html?receipt='+encodeURIComponent(order.receipt);
     }
 
-    function isFormReady() {
-      const name = (document.getElementById('buyerName').value || '').trim();
-      const phone = (document.getElementById('buyerPhone').value || '').trim();
-      const address = (document.getElementById('buyerAddress').value || '').trim();
-      if (!name || !address) return false;
-      if (!/^\d{10,15}$/.test(phone.replace(/\D/g, ''))) return false;
-      return true;
-    }
-
-    function updateSubmitState() {
-      const submitBtn = document.getElementById('submitBtn');
-      if (submitBtn) submitBtn.disabled = !isFormReady();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded',()=>{
       populateCheckout();
+      const upiRadio=document.getElementById('payUpiRadio');
+      const qrRadio=document.getElementById('payQrRadio');
+      const upiPayBtn=document.getElementById('upiPayBtn');
+      const genQrBtn=document.getElementById('generateQrBtn');
+      const confirmBtn=document.getElementById('confirmQrPaidBtn');
 
-      const upiRadio = document.getElementById('payUpiRadio');
-      const qrRadio = document.getElementById('payQrRadio');
-      const upiPayBtn = document.getElementById('upiPayBtn');
-      const genQrBtn = document.getElementById('generateQrBtn');
-      const confirmBtn = document.getElementById('confirmQrPaidBtn');
-
-      function setPaymentMethodUI(method) {
-        const upiPanel = document.getElementById('upiPanel');
-        const qrPanel = document.getElementById('qrPanel');
-        if (upiPanel) upiPanel.classList.toggle('hidden', method !== 'RAZORPAY_UPI');
-        if (qrPanel) qrPanel.classList.toggle('hidden', method !== 'RAZORPAY_QR');
-        document.getElementById('_payment_method').value = method;
-        document.getElementById('_payment_status').value = 'Pending';
-        document.getElementById('_payment_txn').value = '';
+      function setPaymentMethodUI(method){
+        const upiPanel=document.getElementById('upiPanel');
+        const qrPanel=document.getElementById('qrPanel');
+        if(upiPanel) upiPanel.classList.toggle('hidden',method!=='RAZORPAY_UPI');
+        if(qrPanel) qrPanel.classList.toggle('hidden',method!=='RAZORPAY_QR');
+        document.getElementById('_payment_method').value=method;
+        document.getElementById('_payment_status').value='Pending';
+        document.getElementById('_payment_txn').value='';
       }
 
-      if (upiRadio) upiRadio.addEventListener('change', () => setPaymentMethodUI('RAZORPAY_UPI'));
-      if (qrRadio) qrRadio.addEventListener('change', () => setPaymentMethodUI('RAZORPAY_QR'));
-      if (upiPayBtn) upiPayBtn.addEventListener('click', () => {
-        if (!isFormReady()) { alert('Please fill required fields first.'); return; }
-        const meta = {
-          product: document.getElementById('prodName').value,
-          price: document.getElementById('prodPrice').value,
-          name: document.getElementById('buyerName').value.trim(),
-          email: document.getElementById('buyerEmail').value.trim(),
-          phone: document.getElementById('buyerPhone').value.trim(),
-          address: document.getElementById('buyerAddress').value.trim()
-        };
-        openRazorpayCheckout(meta);
-      });
-      if (genQrBtn) genQrBtn.addEventListener('click', showQrForProduct);
-      if (confirmBtn) confirmBtn.addEventListener('click', ()=>{
-        if (!isFormReady()){ alert('Please fill required fields first.'); return; }
-        const txn = (document.getElementById('qrTxnId')||{}).value || '';
-        const fileInput = document.getElementById('paymentScreenshot');
-        const hasFile = fileInput && fileInput.files && fileInput.files[0];
-        if (!txn && !hasFile) {
-          alert('Please upload payment receipt screenshot or enter transaction id before confirming payment.');
-          return;
-        }
-        document.getElementById('_payment_method').value = 'RAZORPAY_QR';
-        document.getElementById('_payment_status').value = 'Paid (manual-confirm)';
-        if (txn) document.getElementById('_payment_txn').value = txn;
-        alert('Payment info recorded. Now click "Place Order" to complete the order.');
+      if(upiRadio) upiRadio.addEventListener('change',()=>setPaymentMethodUI('RAZORPAY_UPI'));
+      if(qrRadio) qrRadio.addEventListener('change',()=>setPaymentMethodUI('RAZORPAY_QR'));
+
+      if(genQrBtn) genQrBtn.addEventListener('click',async ()=>{
+        const product=document.getElementById('prodName').value||'';
+        const qrStatus=document.getElementById('qrStatus');
+        const qrImg=document.getElementById('qrImage');
+        qrStatus.textContent='Searching for static QR...';
+        const path=await findStaticQrForProduct(product);
+        if(path){ qrImg.src=path; qrImg.classList.remove('hidden'); qrStatus.textContent='Scan the QR with your UPI app to pay.'; document.getElementById('_payment_status').value='QR Shown';}
+        else qrStatus.textContent='No static QR found. Provide a static QR image under images/qrcodes/.';
       });
 
-      const nameEl = document.getElementById('buyerName');
-      const phoneEl = document.getElementById('buyerPhone');
-      const addrEl = document.getElementById('buyerAddress');
-      if (nameEl) nameEl.addEventListener('input', updateSubmitState);
-      if (phoneEl) phoneEl.addEventListener('input', updateSubmitState);
-      if (addrEl) addrEl.addEventListener('input', updateSubmitState);
-
-      // initialize UI
-      setPaymentMethodUI(document.getElementById('payUpiRadio').checked ? 'RAZORPAY_UPI' : 'RAZORPAY_QR');
-
-      // Submit handler: if UPI selected and not yet paid, open checkout; otherwise finalize
-      document.getElementById('checkoutForm').addEventListener('submit', function(e){
-        e.preventDefault();
-        if (!isFormReady()){ alert('Please fill required fields correctly.'); return; }
-        const method = document.getElementById('_payment_method').value || 'RAZORPAY_UPI';
-        const meta = {
-          product: document.getElementById('prodName').value,
-          price: document.getElementById('prodPrice').value,
-          name: document.getElementById('buyerName').value.trim(),
-          email: document.getElementById('buyerEmail').value.trim(),
-          phone: document.getElementById('buyerPhone').value.trim(),
-          address: document.getElementById('buyerAddress').value.trim()
+      if(confirmBtn) confirmBtn.addEventListener('click',()=>{
+        const txn=document.getElementById('qrTxnId').value||'';
+        const fileInput=document.getElementById('paymentScreenshot');
+        const hasFile=fileInput && fileInput.files && fileInput.files[0];
+        if(!txn && !hasFile){ alert('Please upload screenshot or enter txn ID before confirming payment.'); return;}
+        document.getElementById('_payment_method').value='RAZORPAY_QR';
+        document.getElementById('_payment_status').value='Paid (manual-confirm)';
+        if(txn) document.getElementById('_payment_txn').value=txn;
+        const meta={
+          product:document.getElementById('prodName').value,
+          price:document.getElementById('prodPrice').value,
+          name:document.getElementById('buyerName').value.trim(),
+          email:document.getElementById('buyerEmail').value.trim(),
+          phone:document.getElementById('buyerPhone').value.trim(),
+          address:document.getElementById('buyerAddress').value.trim()
         };
-        if (method === 'RAZORPAY_UPI') {
-          openRazorpayCheckout(meta);
-          return;
-        }
-        // QR flow: require payment evidence before finalizing
-        if (method === 'RAZORPAY_QR') {
-          const status = (document.getElementById('_payment_status')||{}).value || '';
-          if (status.indexOf('Paid') === -1) {
-            alert('Please confirm QR payment by clicking "I have paid (confirm)" after scanning QR.');
-            return;
-          }
-          const txn = (document.getElementById('qrTxnId')||{}).value || '';
-          const fileInput = document.getElementById('paymentScreenshot');
-          const hasFile = fileInput && fileInput.files && fileInput.files[0];
-          if (!txn && !hasFile) {
-            alert('Please upload payment screenshot or enter transaction id before placing the order.');
-            return;
-          }
-          if (txn) document.getElementById('_payment_txn').value = txn;
-        }
         finalizeOrder(meta);
       });
 
-      // file-protocol notice and fallback handlers
-      function checkFileProtocol(){
-        if (location.protocol === 'file:') {
-          const notice = document.getElementById('fileProtocolNotice');
-          if (notice) notice.classList.remove('hidden');
-        }
-      }
-      const openMail = document.getElementById('openMailFallback');
-      if (openMail) openMail.addEventListener('click', function(){
-        const to = 'artcreation170@gmail.com';
-        const subject = encodeURIComponent('Order from website');
-        const body = encodeURIComponent('Please attach screenshot and include order details.\n\n');
-        window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+      document.getElementById('checkoutForm').addEventListener('submit',e=>{
+        e.preventDefault();
+        const meta={
+          product:document.getElementById('prodName').value,
+          price:document.getElementById('prodPrice').value,
+          name:document.getElementById('buyerName').value.trim(),
+          email:document.getElementById('buyerEmail').value.trim(),
+          phone:document.getElementById('buyerPhone').value.trim(),
+          address:document.getElementById('buyerAddress').value.trim()
+        };
+        finalizeOrder(meta);
       });
-      const howBtn = document.getElementById('howToServer');
-      if (howBtn) howBtn.addEventListener('click', function(){ alert('Run a local server for testing: from Website folder run: npx http-server -p 8080 or use VSCode Live Server.'); });
 
-      checkFileProtocol();
-      updateSubmitState();
+      setPaymentMethodUI('RAZORPAY_UPI');
     });
   </script>
 </body>

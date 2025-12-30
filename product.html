@@ -25,12 +25,16 @@
       <div class="row">
         <div class="col-lg-6">
           <div id="gallery">
-            <!-- Main image and thumbnails will be injected here -->
-            <img id="mainImage" src="./images/product1/image1.svg" alt="Product" class="w-full rounded-lg object-cover mb-4" onerror="this.onerror=null;this.src='./images/placeholder.svg'" loading="lazy">
-
-            <div id="thumbs" class="grid grid-cols-4 gap-2"></div>
+            <!-- Main image -->
+            <img id="mainImage" src="./images/product1/image1.svg" alt="Product" 
+                 class="w-full max-w-[1024px] max-h-[1034px] object-contain rounded-lg mb-4 mx-auto" 
+                 onerror="this.onerror=null;this.src='./images/placeholder.svg'" 
+                 loading="lazy">
+            <!-- Thumbnails -->
+            <div id="thumbs" class="grid grid-cols-4 gap-2 pt-3"></div>
           </div>
         </div>
+
         <div class="col-lg-6">
           <h2 id="productName" class="text-2xl font-bold text-gray-800 mb-2">Product Name</h2>
           <p id="productPrice" class="text-pink-600 font-semibold mb-4">₹0</p>
@@ -38,21 +42,9 @@
 
           <div class="mb-4">
             <button id="buyBtn" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Buy Now</button>
-            <a id="contactBtn" class="ml-3 inline-block bg-gray-200 px-4 py-2 rounded" href="https://forms.gle/Z6xqWiddAmz4Vhdz9" target="_blank">Contact / Order Form</a>
-          </div>
-
-          <div id="videoArea" class="mt-6">
-            <h4 class="font-semibold mb-2">Product Video</h4>
-            <div class="ratio ratio-16x9">
-              <iframe id="productVideo" src="https://www.youtube.com/embed/M7lc1UVf-VE" title="Product video" allowfullscreen></iframe>
-            </div>
+            <a id="contactBtn" class="ml-3 inline-block bg-gray-200 px-4 py-2 rounded" href="https://forms.gle/Z6xqWiddAmz4Vhdz9" target="_blank">Contact Us</a>
           </div>
         </div>
-      </div>
-
-      <div class="mt-8">
-        <h4 class="font-semibold mb-3">More Images</h4>
-        <div id="moreImages" class="grid grid-cols-3 gap-4"></div>
       </div>
     </div>
   </main>
@@ -63,20 +55,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Default data for 6 products (dummy links and images)
     const products = [
-      { id:1, name:'(Mandala Photoframe', price:'499', description:'A beautiful handmade vase crafted with care.', main:'images/product1/image1.jpg',thumbs:['images/product1/image1.jpg','images/product1/image3.jpg'], video:'https://youtube.com/shorts/VcIvQ53wWHE?si=YTur7ZqV9XEPG_HS'},
-      { id:2, name:'Customized Gift Hampe', price:'399', description:'Handwoven basket perfect for home storage.', main:'images/product2/image1.jpg', thumbs:['images/product2/image1.jpg','images/product2/image3.jpg','images/product2/image2.jpg','images/product2/image4.jpg'],  video:'https://www.instagram.com/reel/DEj7ZCjybAp/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='},
-      { id:3, name:'String Art', price:'599', description:'A decorative frame to showcase your favorite memories.', main:'images/product3/image1.jpg', thumbs:['images/product3/image1.jpg','images/product3/image1.jpg','images/product3/image2.jpg','images/product3/image3.jpg'],  video:'https://www.instagram.com/reel/DLhYuA6RsDR/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='},
-      { id:4, name:'Butterfly Keyring', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product4/image1.jpg', thumbs:['images/product4/image1.jpg','images/product4/image1.jpg','images/product4/image2.jpg','images/product4/image3.jpg'], video:' https://youtube.com/shorts/O53gpGYfr0o?si=KtTc8z2s1Ml7WIP2'},
-      { id:5, name:'Customized String Art', price:'450', description:'Decorative basket made with traditional techniques.', main:'images/product5/image1.jpg', thumbs:['images/product5/image1.jpg','images/product5/image1.jpg','images/product5/image2.jpg','images/product5/image3.jpg'], video:' https://www.instagram.com/reel/DAOE8C1t4PT/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='},
-       { id:6, name:'Ganesha Lippan Art', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product6/image1.jpg', thumbs:['images/product6/image1.jpg','images/product6/image4.jpg','images/product6/image2.jpg','images/product6/image3.jpg'], video:' https://youtube.com/shorts/5_Op_dooPj0?si=dCbR3z7-nr2che_I'},
-       { id:7, name:'Dream Catcher Wall Hanging', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product7/image1.jpeg', thumbs:['images/product7/image1.jpeg','images/product7/image2.jpeg','images/product7/image3.jpeg'], video:' https://youtube.com/shorts/y2T9XT1IiCg?si=S1UnBbZ3SSMWh9qe'},
-      { id:8, name:'Thread Lamp', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product8/image1.jpg', thumbs:['images/product8/image1.jpg','images/product8/image2.jpg','images/product8/image3.jpg'], video:'https://youtube.com/shorts/UWmhYWke1HI?si=KbL7I2d52p-4x8AW'},
-       
-      ];
+      { id:1, name:'(Mandala Photoframe', price:'499', description:'A beautiful handmade vase crafted with care.', main:'images/product1/image1.jpg', thumbs:['images/product1/image1.jpg','images/product1/image3.jpg']},
+      { id:2, name:'Customized Gift Hampe', price:'399', description:'Handwoven basket perfect for home storage.', main:'images/product2/image1.jpg', thumbs:['images/product2/image1.jpg','images/product2/image3.jpg','images/product2/image2.jpg','images/product2/image4.jpg']},
+      { id:3, name:'String Art', price:'599', description:'A decorative frame to showcase your favorite memories.', main:'images/product3/image1.jpg', thumbs:['images/product3/image1.jpg','images/product3/image1.jpg','images/product3/image2.jpg','images/product3/image3.jpg']},
+      { id:4, name:'Butterfly Keyring', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product4/image1.jpg', thumbs:['images/product4/image1.jpg','images/product4/image1.jpg','images/product4/image2.jpg','images/product4/image3.jpg']},
+      { id:5, name:'Customized String Art', price:'450', description:'Decorative basket made with traditional techniques.', main:'images/product5/image1.jpg', thumbs:['images/product5/image1.jpg','images/product5/image1.jpg','images/product5/image2.jpg','images/product5/image3.jpg']},
+      { id:6, name:'Ganesha Lippan Art', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product6/image1.jpg', thumbs:['images/product6/image1.jpg','images/product6/image4.jpg','images/product6/image2.jpg','images/product6/image3.jpg']},
+      { id:7, name:'Dream Catcher Wall Hanging', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product7/image3.jpeg', thumbs:['images/product7/image3.jpeg','images/product7/image1.jpeg','images/product7/image2.jpeg']},
+      { id:8, name:'Thread Lamp', price:'699', description:'Beautiful wall hanging crafted from natural fibers.', main:'images/product8/image1.jpg', thumbs:['images/product8/image1.jpg','images/product8/image2.jpg','images/product8/image3.jpg']},
+    ];
 
-    // Utility to get query params
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
@@ -84,13 +73,12 @@
 
     function populateProduct(id) {
       const pid = parseInt(id, 10) || 1;
-      const product = products.find(p=>p.id===pid) || products[0];
+      const product = products.find(p => p.id === pid) || products[0];
 
       document.getElementById('productName').textContent = product.name;
       document.getElementById('productPrice').textContent = '₹' + product.price;
       document.getElementById('productDescription').textContent = product.description;
       document.getElementById('mainImage').src = product.main;
-      document.getElementById('productVideo').src = product.video;
 
       const thumbs = document.getElementById('thumbs');
       thumbs.innerHTML = '';
@@ -99,13 +87,14 @@
         img.src = src;
         img.className = 'w-full h-24 object-cover rounded cursor-pointer';
         img.onerror = function(){ this.onerror=null; this.src='./images/placeholder.svg'; };
-        img.onclick = () => { const m = document.getElementById('mainImage'); m.src = src; m.onerror = function(){ this.onerror=null; this.src='./images/placeholder.svg'; }; };
+        img.onclick = () => {
+          const m = document.getElementById('mainImage');
+          m.src = src;
+          m.onerror = function(){ this.onerror=null; this.src='./images/placeholder.svg'; };
+        };
         thumbs.appendChild(img);
       });
 
-      
-
-      // Buy button: go to checkout page with product id
       document.getElementById('buyBtn').onclick = () => {
         window.location.href = `checkout.html?id=${product.id}`;
       };
@@ -114,7 +103,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       const id = getQueryParam('id') || '1';
       populateProduct(id);
-      // Log missing images to console to help debug missing assets
       document.querySelectorAll('img').forEach(img => {
         img.addEventListener('error', (e) => {
           console.warn('Image failed to load:', e.target.src);
@@ -122,56 +110,5 @@
       });
     });
   </script>
-  <script>
-(function normalizeYouTubeEmbeds(){
-  function toEmbedUrl(url){
-    try {
-      if (!url) return null;
-      const u = new URL(url, location.origin);
-      let id = null;
-      if (u.hostname.includes('youtu.be')) {
-        id = u.pathname.replace(/^\/+/, '');
-      } else if (u.hostname.includes('youtube.com')) {
-        if (u.searchParams.has('v')) id = u.searchParams.get('v');
-        else {
-          const m = u.pathname.match(/\/embed\/([^\/\?]+)/);
-          if (m) id = m[1];
-        }
-      }
-      return id ? 'https://www.youtube.com/embed/' + id + '?rel=0&modestbranding=1' : null;
-    } catch (e) { return null; }
-  }
-
-  function normalizeIframe(iframe){
-    const src = iframe.getAttribute('src') || iframe.dataset.src || '';
-    const embed = toEmbedUrl(src);
-    if (embed && src.indexOf('/embed/') === -1) iframe.src = embed;
-    iframe.setAttribute('loading', iframe.getAttribute('loading') || 'lazy');
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-    iframe.setAttribute('allowfullscreen', '');
-  }
-
-  function replaceLinkWithIframe(a){
-    const url = a.href || a.dataset.href;
-    const embed = toEmbedUrl(url);
-    if (!embed) return;
-    const ifr = document.createElement('iframe');
-    ifr.src = embed;
-    ifr.width = a.dataset.width || '560';
-    ifr.height = a.dataset.height || '315';
-    ifr.setAttribute('loading', 'lazy');
-    ifr.setAttribute('frameborder', '0');
-    ifr.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-    ifr.setAttribute('allowfullscreen', '');
-    a.parentNode.replaceChild(ifr, a);
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    document.querySelectorAll('iframe').forEach(normalizeIframe);
-    document.querySelectorAll('a[href*="youtube.com/watch"], a[href*="youtu.be/"]').forEach(replaceLinkWithIframe);
-  });
-})();
-</script>
 </body>
 </html>
