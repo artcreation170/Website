@@ -155,15 +155,15 @@
       };
 
       // Append hidden inputs for transaction and file
-      const form = document.getElementById('checkoutForm');
-      const txnInput = document.createElement('input');
-      txnInput.type='hidden'; txnInput.name='transaction_id'; txnInput.value=order.transaction_id;
-      form.appendChild(txnInput);
+      //const form = document.getElementById('checkoutForm');
+      //const txnInput = document.createElement('input');
+      //txnInput.type='hidden'; txnInput.name='transaction_id'; txnInput.value=order.transaction_id;
+      //form.appendChild(txnInput);
 
       alert('Payment confirmed and order placed successfully!');
 
-      form.submit();
-       window.location.href='thankyou.html?receipt='+encodeURIComponent(order.receipt);
+      //form.submit();
+       //window.location.href='thankyou.html?receipt='+encodeURIComponent(order.receipt);
     }
 
     document.addEventListener('DOMContentLoaded',()=>{
@@ -210,24 +210,43 @@
         checkFormReady();
       });
 
-      document.getElementById('checkoutForm').addEventListener('submit', e=>{
-        e.preventDefault();
-        const allFilled = requiredFields.every(id=>document.getElementById(id).value.trim()!=='');
-        const paid = document.getElementById('_payment_status').value==='Paid';
-        if(!allFilled){ alert('Please fill all required fields.'); return; }
-        if(!paid){ alert('Please confirm payment before submitting the order.'); return; }
+      //document.getElementById('checkoutForm').addEventListener('submit', e=>{
+        //e.preventDefault();
+        //const allFilled = requiredFields.every(id=>document.getElementById(id).value.trim()!=='');
+        //const paid = document.getElementById('_payment_status').value==='Paid';
+        //if(!allFilled){ alert('Please fill all required fields.'); return; }
+        //if(!paid){ alert('Please confirm payment before submitting the order.'); return; }
 
-        const meta={
-          product:document.getElementById('prodName').value,
-          price:document.getElementById('prodPrice').value,
-          name:document.getElementById('buyerName').value.trim(),
-          email:document.getElementById('buyerEmail').value.trim(),
-          phone:document.getElementById('buyerPhone').value.trim(),
-          address:document.getElementById('buyerAddress').value.trim(),
-          transaction_id:document.getElementById('qrTxnId').value.trim()
-        };
-        finalizeOrder(meta);
-      });
+        //const meta={
+          //product:document.getElementById('prodName').value,
+          //price:document.getElementById('prodPrice').value,
+          //name:document.getElementById('buyerName').value.trim(),
+          //email:document.getElementById('buyerEmail').value.trim(),
+          //phone:document.getElementById('buyerPhone').value.trim(),
+          //address:document.getElementById('buyerAddress').value.trim(),
+          //transaction_id:document.getElementById('qrTxnId').value.trim()
+       // };
+        //finalizeOrder(meta);
+      document.getElementById('checkoutForm').addEventListener('submit', e=>{
+  const allFilled = requiredFields.every(id=>document.getElementById(id).value.trim()!=='');
+  const paid = document.getElementById('_payment_status').value==='Paid';
+
+  if(!allFilled){
+    e.preventDefault();
+    alert('Please fill all required fields.');
+    return;
+  }
+
+  if(!paid){
+    e.preventDefault();
+    alert('Please confirm payment before submitting the order.');
+    return;
+  }
+
+  // ✅ DO NOT prevent default
+  // FormSubmit will now send the email
+});
+
 
       checkFormReady();
     });
