@@ -55,6 +55,10 @@
     #home { background-color: #ffe4e6; padding: 5rem 0; }
     .card-img-top { object-fit: cover; height: 200px; }
 
+.offcanvas-body .nav-link {
+  font-size: 1.1rem;
+  padding: 10px 0;
+}
 
     #chatbot {
       position: fixed; bottom: 20px; right: 20px;
@@ -93,40 +97,68 @@
 
   <!-- Navbar -->
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-white shadow-sm sticky-top">
   <div class="container">
+    
+    <!-- Logo -->
     <a class="navbar-brand d-flex align-items-center" href="#">
       <img src="logo.jpg" alt="Logo" class="rounded-circle me-2" width="50" height="50">
       <span class="text-danger fw-bold fs-4">Art and Creation</span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler d-lg-none" type="button"
+      data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+
+    <!-- Desktop Menu -->
+    <div class="d-none d-lg-flex ms-auto">
+      <ul class="navbar-nav flex-row gap-4">
         <li class="nav-item">
-          <a href="#home" class="text-gray-700 px-4 flex items-center gap-1">
-    <i class="bi bi-house-door-fill"></i> Home
-  </a>
+          <a class="nav-link fw-semibold" href="#home">Home</a>
         </li>
         <li class="nav-item">
-          <a href="#products" class="text-gray-700 px-4 flex items-center gap-1">
-    <i class="bi bi-box-seam"></i> Products
-  </a>
+          <a class="nav-link fw-semibold" href="#products">Products</a>
         </li>
         <li class="nav-item">
-           <a href="#about" class="text-gray-700 px-4 flex items-center gap-1">
-    <i class="bi bi-info-circle-fill"></i> About
-  </a>
+          <a class="nav-link fw-semibold" href="#about">About</a>
         </li>
-         <a href="#contact" class="text-gray-700 px-4 flex items-center gap-1">
-    <i class="bi bi-envelope-fill"></i> Contact
-  </a>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold" href="#contact">Contact</a>
         </li>
       </ul>
     </div>
+
   </div>
 </nav>
+
+<!-- Offcanvas Mobile Menu -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title text-danger fw-bold">Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <ul class="navbar-nav gap-3">
+      <li class="nav-item">
+        <a class="nav-link fw-semibold" href="#home" data-bs-dismiss="offcanvas">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold" href="#products" data-bs-dismiss="offcanvas">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold" href="#about" data-bs-dismiss="offcanvas">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold" href="#contact" data-bs-dismiss="offcanvas">Contact</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
 
 
   <!-- Hero Section -->
